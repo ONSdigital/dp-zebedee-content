@@ -1,10 +1,10 @@
 # dp-zebedee-content
 
-Command line helper tool for developer Zebedee-CMS set up. The script:
+Command line helper tool for developer Zebedee-CMS set up:
  - Generates the required file system structure.
  - Populates the CMS with basic content
- - Generates a service account (required if running with the _CMD_ feature enabled.
- - Generates a custom `run-cms.sh` for running Zebedee locally with typical developer configurations.
+ - Generates a service account (required if running with the _CMD_ feature enabled).
+ - Generates a `run-cms.sh` for running Zebedee locally with typical developer configurations.
 
 ### Prerequisites
 - Go 1.10.2
