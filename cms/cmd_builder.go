@@ -60,18 +60,18 @@ func (b *Builder) cleanAndPrepare(contentDir string) error {
 	}
 
 	if exists {
-		log.Event(nil, "the specified content-dir already exists attempting to remove it", log.Data{"content-dir": contentDir})
+		log.Event(nil, "the specified content_dir already exists attempting to remove it", log.Data{"content_dir": contentDir})
 		if err := os.RemoveAll(contentDir); err != nil {
-			return errors.WithMessage(err, "error removing existing content-dir")
+			return errors.WithMessage(err, "error removing existing content_dir")
 		}
-		log.Event(nil, "successfully removed existing content-dir", log.Data{"content-dir": contentDir})
+		log.Event(nil, "successfully removed existing content_dir", log.Data{"content_dir": contentDir})
 	}
 
-	log.Event(nil, "creating content-dir", log.Data{"content-dir": contentDir})
+	log.Event(nil, "creating content_dir", log.Data{"content_dir": contentDir})
 	if err := os.MkdirAll(contentDir, 0700); err != nil {
 		return err
 	}
-	log.Event(nil, "content-dir created successfully", log.Data{"content-dir": contentDir})
+	log.Event(nil, "content_dir created successfully", log.Data{"content_dir": contentDir})
 	return nil
 }
 

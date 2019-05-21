@@ -11,18 +11,18 @@ import (
 
 func main() {
 	log.Namespace = "zebedee-content"
-	contentDir := flag.String("content-dir", "", "The directory in which to build Zebedee directory structure and unpack the default content")
-	projectDir := flag.String("project-dir", "", "The root directory of your Zebedee project")
+	contentDir := flag.String("content_dir", "", "The directory in which to build Zebedee directory structure and unpack the default content")
+	projectDir := flag.String("project_dir", "", "The root directory of your Zebedee project")
 	enableCMD := flag.Bool("enable_cmd", false, "If enabled the generated run script will have the CMD features enabled")
 	flag.Parse()
 
 	if *contentDir == "" {
-		log.Event(nil, "please specify a content-dir - see help (-h) for more details")
+		log.Event(nil, "please specify a content_dir - see help (-h) for more details")
 		os.Exit(1)
 	}
 
 	if *projectDir == "" {
-		log.Event(nil, "please specify the project-dir - see help (-h) for more details")
+		log.Event(nil, "please specify the project_dir - see help (-h) for more details")
 		os.Exit(1)
 	}
 

@@ -1,9 +1,10 @@
 # dp-zebedee-content
 
-Command line tool for generating the Zebedee-CMS directory structure and populating it with default content. Simply 
-provide an absolute path to a directory for the generator to create the directory structure. In addition a personalised
- `/generated/run-cms.sh` is generated which can be used to run Zebedee in publishing/CMS mode using the dev local config.
-
+Command line helper tool for developer Zebedee-CMS set up. The script:
+ - Generates the required file system structure.
+ - Populates the CMS with basic content
+ - Generates a service account (required if running with the _CMD_ feature enabled.
+ - Generates a custom `run-cms.sh` for running Zebedee locally with typical developer configurations.
 
 ### Prerequisites
 - Go 1.10.2
@@ -12,32 +13,27 @@ provide an absolute path to a directory for the generator to create the director
 ### Getting started
 ```
 go get github.com/ONSdigital/dp-zebedee-content
-cd content
-go build -o builder
+go build -o zebContent
 ```
 
 ### Run it
 ```
-./builder -r=[YOUR_PATH]
+./zebContent -content_dir=[CONTENT_DIR] -project_dir=[PROJECT_DIR] -enable_cmd[true/false]
 ```
 
-| Flag       | Description                                                                   |
-| ---------- |-------------------------------------------------------------------------------|
-| -h / -help | Display the help menu.                                                        |
-| -r         | The absolute path of the directory to generate the zebedee file structure in. |
-| -cmd       | If `true` a CMD service account will be generated, the default is false.      |
+| Flag          | Description                                                                                    | Example                                                  |
+| ------------- |----------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| -h / -help    | Display the help menu.                                                                         |                                                          |
+| -content_dir  | The directory in which to build the Zebedee directory structure and unpack the default content | `/Users/RickSanchez/Desktop/zebedee-content/generated`   |
+| -project_dir  | The root directory of your Zebedee java project                                                | `/Users/RickSanchez/IdeaProjects/zebedee`                |
+| -enable_cmd   | If `enabled` the generated `run-cms.sh` script will have the CMD feature enabled               |                                                          |
 
-Once the script has run successfully you will have a the Zebedee folder structure under the dir you provided for `-r`.
-If you wish to use the generated `run-cms.sh` to run Zebedee CMS simply copy it to the root of your Zebedee project and 
-run:
-```
-./run-cms.sh
-``` 
+Once you have run generator (assuming it has completed successfully) you should have the required directories, content and config to run Zebedee locally.
+To do so make sure you have completed the Zebedee set up guide and simply  run `./run-cmd.sh` (found in the root of your Zebebee project directory).
+ 
 _NOTE_: You may be required to make it an executable before you can run it.
 ```
 sudo chmod +x run-cms.sh
 ```
-
-
 
 [1]: https://github.com/kardianos/govendor
