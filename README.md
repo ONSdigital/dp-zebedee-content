@@ -43,7 +43,7 @@ sudo chmod +x run-cms.sh
 
 ### Help/Issues
 If you experience any problems with this tool please speak to a member of the dev team. If you believe there is a defect or issue with the code you can either:
-- Raise a github issue.
+- Raise a [github issue][2].
 - Open pull request.
 
 Please be sure to provide a description of the problem and steps to recreate. 
@@ -52,3 +52,4 @@ Kind regards
 The Dev team  
 
 [1]: https://github.com/kardianos/govendor
+[2]: https://github.com/ONSdigital/dp-zebedee-content/issues
