@@ -21,12 +21,14 @@ go build -o zebContent
 ./zebContent -content_dir=[CONTENT_DIR] -project_dir=[PROJECT_DIR] -enable_cmd[true/false]
 ```
 
+### Flags
 | Flag         | Description                                                                   | Example                                                |
 | ------------ |------------------------------------------------------------------------------ | ------------------------------------------------------ |
 | h / help     | Display the help menu.                                                        |                                                        |
 | content_dir  | The directory to build the Zebedee directory structure and unpack the content | `/Users/RickSanchez/Desktop/zebedee-content/generated` |
 | project_dir  | The root directory of your Zebedee java project.                              | `/Users/RickSanchez/IdeaProjects/zebedee`              |
 | enable_cmd   | Enable or disable the _CMD_ feature.                                          |                                                        |
+
 
 Once you have run generator (assuming it has completed successfully) you should now have the required directories, content and configurations to run Zebedee locally.
 
@@ -40,7 +42,7 @@ sudo chmod +x run-cms.sh
 ```
 
 ### Help/Issues
-If you experience any problems with this tool please speak to a member of the dev team. If you believe there is a defect or issue with the script you can either:
+If you experience any problems with this tool please speak to a member of the dev team. If you believe there is a defect or issue with the code you can either:
 - Raise a github issue.
 - Open pull request.
 
