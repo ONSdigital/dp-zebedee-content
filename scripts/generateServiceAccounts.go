@@ -1,17 +1,17 @@
 package main
 
 import (
-	"math/rand"
-	"time"
-	"os"
 	"encoding/json"
 	"fmt"
+	"math/rand"
+	"os"
+	"time"
 )
 
 var (
 	serviceIDChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	r              *rand.Rand
-	services = []string{"babbage",
+	services       = []string{"babbage",
 		"florence",
 		"zebedee",
 		"dp-frontend-router",
@@ -32,15 +32,15 @@ var (
 		"dp-dataset-exporter",
 		"dp-hierarchy-api",
 		"dp-hierarchy-builder",
+		"dp-dataset-exporter",
 		"dp-dataset-exporter-xlsx",
 		"dp-search-builder",
 		"dp-search-api",
 		"dp-api-router",
-		"dp-file-downloader",
+		"dp-download-service",
 		"dp-frontend-geography-controller",
 		"dp-identity-api"}
 )
-
 
 func main() {
 
