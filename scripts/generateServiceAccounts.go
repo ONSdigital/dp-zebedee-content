@@ -13,7 +13,6 @@ var (
 	r              *rand.Rand
 	services       = []string{"babbage",
 		"florence",
-		"zebedee",
 		"dp-frontend-router",
 		"dp-frontend-filter-dataset-controller",
 		"dp-frontend-renderer",
