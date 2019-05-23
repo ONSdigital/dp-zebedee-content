@@ -53,11 +53,13 @@ func main() {
 
 		jsonData, err := json.Marshal(account)
 		if err != nil {
+			fmt.Sprintf("Failed when attempting to marshal json for service: ", service)
 			panic(err)
 		}
 
 		jsonFile, err := os.Create("./" + id + ".json")
 		if err != nil {
+			fmt.Sprintf("Failed when generating json for service: ", service)
 			panic(err)
 		}
 		defer jsonFile.Close()
