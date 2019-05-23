@@ -63,6 +63,8 @@ func main() {
 		defer jsonFile.Close()
 		jsonFile.Write(jsonData)
 
+		fmt.Println(id, service)
+
 	}
 
 }
