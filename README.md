@@ -13,8 +13,23 @@ Command line helper tool for developer Zebedee-CMS set up:
 ### Getting started
 ```
 go get github.com/ONSdigital/dp-zebedee-content
-go build -o zebContent
 ```
+
+There are 2 commands provided by this repository: content and service-accounts
+
+To build content:
+```
+cd dp-zebedee-content/cmd/content
+go build -o ../../zebContent
+```
+
+To build service-accounts:
+```
+cd dp-zebedee-content/cmd/service-accounts
+go build -o ../../service-accounts
+```
+
+This will result in executable, clearly named files in the root of this repository.
 
 ### Run it
 ```
