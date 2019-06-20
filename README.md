@@ -6,6 +6,8 @@ Command line helper tool for developer Zebedee-CMS set up:
  - Generates a service account (required if running with the _CMD_ feature enabled).
  - Generates a `run-cms.sh` for running Zebedee locally with typical developer configurations.
 
+Note - this is primarily a content creation tool but there are some supplementary scripts, these can be found in the `/scripts` directroy and will be detailed in their own README's.
+
 ### Prerequisites
 - Go 1.10.2
 - [Govendor][1] 

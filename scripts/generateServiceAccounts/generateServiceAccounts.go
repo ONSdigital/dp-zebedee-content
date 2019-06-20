@@ -1,4 +1,4 @@
-package main
+package generateServiceAccounts
 
 import (
 	"encoding/json"
@@ -6,12 +6,13 @@ import (
 	"math/rand"
 	"os"
 	"time"
+	"flag"
 )
 
 var (
 	serviceIDChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	r              *rand.Rand
-	services       = []string{"babbage",
+	serviceList       = []string{"dp-import-reporter",
 		"florence",
 		"dp-frontend-router",
 		"dp-frontend-filter-dataset-controller",
@@ -28,7 +29,6 @@ var (
 		"dp-filter-api",
 		"dp-recipe-api",
 		"dp-code-list-api",
-		"dp-dataset-exporter",
 		"dp-hierarchy-api",
 		"dp-hierarchy-builder",
 		"dp-dataset-exporter",
@@ -38,10 +38,26 @@ var (
 		"dp-api-router",
 		"dp-download-service",
 		"dp-frontend-geography-controller",
-		"dp-identity-api"}
+		"dp-identity-api"}}
 )
 
 func main() {
+
+	specificService := flag.String("svc", "", "a specific service to generate an account for")
+	withID := flag.String("id", "", "generate a specific service account with a user supplied ID")
+	flag.Parse()
+
+	if *specificService == "" && *withID != "" {
+		fmt.Println("Aborting, you must specify a lone service to use a pre-defined ID")
+		os.Exit(1)
+	}
+
+	var services []string
+	if *specificService != "" {
+		services = []string{*specificService}
+	} else {
+		services = serviceList
+	}
 
 	for _, service := range services {
 
@@ -49,7 +65,12 @@ func main() {
 			"id": service,
 		}
 
-		id := newRandomID(64)
+		var id string
+		if *withID == "" {
+			id = newRandomID(64)
+		} else {
+			id = *withID
+		}
 
 		jsonData, err := json.Marshal(account)
 		if err != nil {
