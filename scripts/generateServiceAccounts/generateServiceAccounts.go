@@ -39,7 +39,7 @@ var (
 		"dp-api-router",
 		"dp-download-service",
 		"dp-frontend-geography-controller",
-		"dp-identity-api"}}
+		"dp-identity-api"}
 )
 
 func main() {
