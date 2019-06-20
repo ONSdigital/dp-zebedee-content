@@ -17,7 +17,7 @@ Running on the box:
 - `cd /var/florence/zebedee/services`
 - get this script via `curl -o generateServiceAccounts.go https://raw.githubusercontent.com/ONSdigital/dp-zebedee-content/master/scripts/generateServiceAccounts/generateServiceAccounts.go`
 - start the go docker image via `sudo docker run -i -t --name <NAME> --userns=host -v /var/florence/zebedee:/zebe-test:rw golang /bin/bash`
-- within the container `/zebe-test/services`
+- within the container `cd /zebe-test/services`
 - Use script as per usage section
 
 Note - you may need to change <NAME> to a unique value.

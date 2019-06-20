@@ -1,4 +1,4 @@
-package generateServiceAccounts
+package main
 
 import (
 	"encoding/json"
