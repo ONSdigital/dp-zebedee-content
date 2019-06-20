@@ -13,6 +13,7 @@ var (
 	serviceIDChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	r              *rand.Rand
 	serviceList       = []string{"dp-import-reporter",
+		"babbage",
 		"florence",
 		"dp-frontend-router",
 		"dp-frontend-filter-dataset-controller",
