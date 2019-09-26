@@ -58,11 +58,12 @@ type Builder struct {
 }
 
 type RunTemplate struct {
-	ZebedeeRoot         string
-	EnableDatasetImport bool
-	DatasetAPIURL       string
-	DatasetAPIAuthToken string
-	ServiceAuthToken    string
+	ZebedeeRoot              string
+	EnableDatasetPermissions bool
+	EnableDatasetImport      bool
+	DatasetAPIURL            string
+	DatasetAPIAuthToken      string
+	ServiceAuthToken         string
 }
 
 // New construct a new cmd.Builder
@@ -92,11 +93,12 @@ func New(root string, isCMD bool) (*Builder, error) {
 
 func (b *Builder) GetRunTemplate() *RunTemplate {
 	return &RunTemplate{
-		ZebedeeRoot:         b.rootDir,
-		EnableDatasetImport: b.enableCMD,
-		DatasetAPIURL:       b.datasetAPIURL,
-		DatasetAPIAuthToken: b.datasetAPIAuthToken,
-		ServiceAuthToken:    b.serviceAccountID,
+		ZebedeeRoot:              b.rootDir,
+		EnableDatasetImport:      b.enableCMD,
+		EnableDatasetPermissions: b.enableCMD,
+		DatasetAPIURL:            b.datasetAPIURL,
+		DatasetAPIAuthToken:      b.datasetAPIAuthToken,
+		ServiceAuthToken:         b.serviceAccountID,
 	}
 }
 

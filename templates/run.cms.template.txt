@@ -7,7 +7,7 @@
 #############################################################
 
 # Sets the root Zebedee directory required to run Zebedee in publishing / CMS mode.
-export zebedee_root={{.ZebedeeRoot}}
+export zebedee_root="${zebedee_root:-{{.ZebedeeRoot}}}"
 
 # Zebedee runs by default on port :8082
 export PORT="${PORT:-8082}"
@@ -36,17 +36,20 @@ export FORMAT_LOGGING=true
 ###                               ###
 #####################################
 
-# feature flag to enabled/disabled the CMD features in Zebedee
-export ENABLE_DATASET_IMPORT={{.EnableDatasetImport}}
+# feature flag to enabled/disabled the CMD features in Zebedee default to enabled
+export ENABLE_DATASET_IMPORT="${ENABLE_DATASET_IMPORT:-{{.EnableDatasetImport}}}"
 
-# The dp-dataset-api url
-export DATASET_API_URL={{.DatasetAPIURL}}
+# Feature flag to enable CMD authorization features.
+export ENABLE_PERMISSIONS_AUTH="${ENABLE_PERMISSIONS_AUTH:-{{.EnableDatasetPermissions}}}"
 
-# The dp-dataset api auth token
-export DATASET_API_AUTH_TOKEN={{.DatasetAPIAuthToken}}
+# the dataset API url set default if not already set
+export DATASET_API_URL="${DATASET_API_URL:-{{.DatasetAPIURL}}}"
 
-# The service auth token
-export SERVICE_AUTH_TOKEN={{.ServiceAuthToken}}
+# the dataset API authentication token set default if not already set
+export DATASET_API_AUTH_TOKEN="${DATASET_API_AUTH_TOKEN:-{{.DatasetAPIAuthToken}}}"
+
+# Zebedee's authentication token for communicating with the dataset API set default if not already set
+export SERVICE_AUTH_TOKEN="${SERVICE_AUTH_TOKEN:-{{.ServiceAuthToken}}}"
 
 mvn clean package dependency:copy-dependencies -Dmaven.test.skip=true && \
 java $JAVA_OPTS \
