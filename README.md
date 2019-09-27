@@ -35,7 +35,7 @@ Once you have run generator (assuming it has completed successfully) you should 
 ### CMD configuration
 If you are running Zebedee with the _CMD_ feature enabled you can find the _CMD_ specific configuration values under the CMD section of the generated `./run-cmd.sh` script.
 
-:warning: The script applies default values for the following config properties. When running the script **any existing configuration you have set will to precedence over these defaults**.
+:warning: The script applies default values for the following config properties. When running the script **any existing configuration you have set will take precedence over these defaults**.
 
 ```bash
 zebedee_root
