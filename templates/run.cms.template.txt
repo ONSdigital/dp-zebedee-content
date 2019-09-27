@@ -51,6 +51,9 @@ export DATASET_API_AUTH_TOKEN="${DATASET_API_AUTH_TOKEN:-{{.DatasetAPIAuthToken}
 # Zebedee's authentication token for communicating with the dataset API set default if not already set
 export SERVICE_AUTH_TOKEN="${SERVICE_AUTH_TOKEN:-{{.ServiceAuthToken}}}"
 
+#
+# Compile and run
+#
 mvn clean package dependency:copy-dependencies -Dmaven.test.skip=true && \
 java $JAVA_OPTS \
  -Dlogback.configurationFile=zebedee-cms/target/classes/logback.xml \

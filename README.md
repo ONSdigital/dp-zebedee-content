@@ -7,7 +7,7 @@ Command line helper tool for developer Zebedee-CMS set up:
  - Generates a `run-cms.sh` for running Zebedee locally with typical developer configurations.
 
 ### Prerequisites
-- Go 1.10.2
+- Go 1.10.2 +
 - [Govendor][1] 
 
 ### Getting started
@@ -32,7 +32,20 @@ go build -o zebContent
 
 Once you have run generator (assuming it has completed successfully) you should now have the required directories, content and configurations to run Zebedee locally.
 
-If you are running Zebedee with the _CMD_ feature enabled you can find the _CMD_ configuration values, auth tokens & service accounts ID's under the CMD section of the `./run-cmd.sh`.
+### CMD configuration
+If you are running Zebedee with the _CMD_ feature enabled you can find the _CMD_ specific configuration values under the CMD section of the generated `./run-cmd.sh` script.
+
+:warning The script applies default values for the following config properties. When running the script **any existing configuration you have set will to precedence over these defaults**.
+
+```bash
+zebedee_root
+PORT
+ENABLE_DATASET_IMPORT
+ENABLE_PERMISSIONS_AUTH
+DATASET_API_URL
+DATASET_API_AUTH_TOKEN
+SERVICE_AUTH_TOKEN
+```
 
 Once you have completed the Zebedee set up guide run `./run-cmd.sh` (found in the root of your Zebebee project directory).
  
