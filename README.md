@@ -8,16 +8,17 @@ Command line helper tool for developer Zebedee-CMS set up:
 
 ### Prerequisites
 - Go 1.10.2 +
-- [Govendor][1] 
 
 ### Getting started
+The library uses Go Modules so it need to be cloned to a directory **outside of your $GOPATH**
 ```
-go get github.com/ONSdigital/dp-zebedee-content
-go build -o zebContent
+git clone git@github.com:ONSdigital/dp-zebedee-content.git
 ```
 
-### Run it
+### Build & Run
 ```
+go build -o zebContent
+
 ./zebContent -content_dir=[CONTENT_DIR] -project_dir=[PROJECT_DIR] -enable_cmd[true/false]
 ```
 
