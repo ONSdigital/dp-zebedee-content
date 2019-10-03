@@ -74,11 +74,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	if len(existingAccounts) > 0 {
+		log.Event(nil, "found existing service accounts skipped", log.Data{"existing_accounts": existingAccounts})
+	}
+
 	for _, service := range services {
 		logD := log.Data{"service": service}
 
 		if _, ok := existingAccounts[service]; ok {
-			log.Event(nil, "a service account already exists for service skipping ", logD)
 			continue
 		}
 
