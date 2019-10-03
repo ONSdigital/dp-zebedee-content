@@ -3,9 +3,9 @@
 Set up script for generating Zebedee service accounts.
 
 ### Service Accounts.
-Service accounts are how our API services authenticate inbound and "sign" outbound requests and identify the caller. 
-Service account files are simple `.json` files containing an ID field - the service name (confusingly). The file name is
- a UUID which is the **service token value**.
+Service accounts are how our API services authenticate inbound and "sign" outbound requests. Service account files are 
+simple `.json` files containing an ID field - the service name (confusingly). The file name is
+ a UUID which is the **service token value** used to sign a request/identify the caller.
 
 #### Example Florence service account
 
@@ -15,8 +15,12 @@ Service account files are simple `.json` files containing an ID field - the serv
   "id": "florence"
 }
 ```
-If Florence makes a request to an API requiring service authentication it will send an auth request header with value 
-`1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9` to identify itself. 
+In this case if Florence makes a request to an API requiring service authentication it will set the Auth header with the 
+token to identify itself.
+
+```
+Authorization: Bearer 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9
+```
 
 ## Generating Service Accounts
 
@@ -71,6 +75,33 @@ The script will output a list of tokens created and the service they belong to
 docker stop <CONTAINER_ID>
 
 docker rm <CONTAINER_ID>
+```
+
+
+### Generating service accounts for local set 
+To generate service accounts for your local set up:
+
+1 . Clone the script - the script uses Go Modules so should be placed outside of the $GOPATH
+```
+git clone https://github.com/ONSdigital/dp-zebedee-content.git
+```
+
+2. Move into the scripts dir
+```
+cd dp-zebedee-content/scripts/service-accounts
+```
+
+2. Build the generator binary
+```
+go build -o generator
+```
+
+7. Run the script: where `dir` is your `$zebedee_root` + `/zebedee/services` path 
+ 
+```
+export HUMAN_LOG=true
+
+./generator -dir="<YOUR_ZEBEDEE_SERVICES_PATH>"
 ```
 
 
