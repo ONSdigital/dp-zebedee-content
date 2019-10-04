@@ -42,8 +42,9 @@ sudo docker run -i -t --name service-accounts \
 apt-get update && apt-get install vim
 ```
 
-4. Clone the script - the script uses Go Modules so should be placed outside of the **$GOPATH**
-**Note:** When cloning the repo make sure you use `https` instead of `ssh`.
+4. Clone the script - the script uses Go Modules so should be placed outside of the **$GOPATH**. 
+
+    **Note:** When cloning the repo make sure you use `https` instead of `ssh`.
 ```
 git clone https://github.com/ONSdigital/dp-zebedee-content.git
 ```
@@ -56,7 +57,7 @@ go build -o generator
 
 6. Run the script: Assuming everything is good the script will generate a service account for each service listed in 
 
-        `dp-zebedee-content/scripts/service-accounts/generateServiceAccounts.go`.
+        dp-zebedee-content/scripts/service-accounts/generateServiceAccounts.go
  
     `-dir` is the path of the service account directory where the generated service account files will be written. If 
     you have created a volume mapping as defined in step 2 this will be `-dir="/zebedee/services"`.
