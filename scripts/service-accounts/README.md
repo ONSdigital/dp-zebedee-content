@@ -5,9 +5,9 @@ Set up script for generating Zebedee service accounts.
 ### Service Accounts.
 Service accounts are how our API services authenticate inbound and "sign" outbound requests. Service account files are 
 simple `.json` files containing an ID field - the service name (confusingly). The file name is
- a UUID which is the **service token value** used to sign a request/identify the caller.
+ a UUID which is the **service token value** used to sign a request/identify a caller.
 
-#### Example
+#### Florence Example
 
 `1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9.json`
 ```json
@@ -20,8 +20,8 @@ If Florence makes a request to an API requiring service authentication it will s
 Authorization: Bearer 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9
 ```
 The API receiving the request will check the request contains an authentication header and make a request to the 
-__Identity__ API to verify the caller is known. If the identity check request is successful the request continues to its 
-destination otherwise it is rejected immediately with the appropriate HTTP status code.
+__Identity__ API to verify the caller is known. If the identity check request is successful the request is allowed to 
+continue to its destination otherwise it is rejected immediately with the appropriate HTTP status code.
 
 ## Generating Service Accounts
 
@@ -54,12 +54,14 @@ cd dp-zebedee-content/scripts/service-accounts
 go build -o generator
 ```
 
-6. Run the script: Assuming everything is good the script will generate a service account for each service listed under 
-`dp-zebedee-content/scripts/service-accounts/generateServiceAccounts.go` var `services`. The script is non destructive 
-so if a service account already exists it will not be overwritten. 
+6. Run the script: Assuming everything is good the script will generate a service account for each service listed in 
+
+        `dp-zebedee-content/scripts/service-accounts/generateServiceAccounts.go`.
  
-`-dir` is the path of the service account directory where generated service account files will be written. If you have 
-created a volume mapping as defined in step 2 this will be `-dir="/zebedee/services"` 
+    `-dir` is the path of the service account directory where the generated service account files will be written. If 
+    you have created a volume mapping as defined in step 2 this will be `-dir="/zebedee/services"`.
+    
+     **The script is non destructive**: If a service account already exists it will not be overwritten. 
 ```
 export HUMAN_LOG=true
 
@@ -70,7 +72,7 @@ The script will output a list of tokens created and the service they belong to
 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9    florence
 ```
 
-7. Once you've finished stop and remove the container
+7. Once you've generated the required service accounts please stop and remove the container.
 ```bash
 docker stop <CONTAINER_ID>
 
