@@ -7,7 +7,7 @@ Service accounts are how our API services authenticate inbound and "sign" outbou
 simple `.json` files containing an ID field - the service name (confusingly). The file name is
  a UUID which is the **service token value** used to sign a request/identify the caller.
 
-#### Example Florence service account
+#### Example
 
 `1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9.json`
 ```json
@@ -15,12 +15,13 @@ simple `.json` files containing an ID field - the service name (confusingly). Th
   "id": "florence"
 }
 ```
-In this case if Florence makes a request to an API requiring service authentication it will set the Auth header with the 
-token to identify itself.
-
+If Florence makes a request to an API requiring service authentication it will set the Auth header with the above token to identify itself:
 ```
 Authorization: Bearer 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9
 ```
+The API receiving the request will check the request contains an authentication header and make a request to the 
+__Identity__ API to verify the caller is known. If the identity check request is successful the request continues to its 
+destination otherwise it is rejected immediately with the appropriate HTTP status code.
 
 ## Generating Service Accounts
 
@@ -28,11 +29,11 @@ Authorization: Bearer 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnS
 
 1. SSH onto the Zebedee publishing-mount.
 
-2. Run a golang docker container with a volume that maps the zebedee directory on the publishing box:
+2. Run a golang docker container with a volume mapping the root zebedee directory on the publishing mount box to `/zebedee`:
 ```
 sudo docker run -i -t --name service-accounts \
    --userns=host \
-   -v <CONTENT_DIR>:/zebedee:rw \
+   -v <ROOT_ZEBEDEE_DIR>:/zebedee:rw \
    golang /bin/bash
 ```
 
@@ -41,25 +42,24 @@ sudo docker run -i -t --name service-accounts \
 apt-get update && apt-get install vim
 ```
 
-4. Clone the script - the script uses Go Modules so should be placed outside of the $GOPATH
+4. Clone the script - the script uses Go Modules so should be placed outside of the **$GOPATH**
 **Note:** When cloning the repo make sure you use `https` instead of `ssh`.
 ```
 git clone https://github.com/ONSdigital/dp-zebedee-content.git
 ```
 
-5. Move into the scripts dir
+5. Move into the scripts dir and build the generator binary
 ```
 cd dp-zebedee-content/scripts/service-accounts
-```
-
-6. Build the generator binary
-```
 go build -o generator
 ```
 
-7. Run the script: Assuming everything is good the script will generate each of the required service accounts. The 
-script is non destructive so if a service account already exists it will not be overwritten. 
+6. Run the script: Assuming everything is good the script will generate a service account for each service listed under 
+`dp-zebedee-content/scripts/service-accounts/generateServiceAccounts.go` var `services`. The script is non destructive 
+so if a service account already exists it will not be overwritten. 
  
+`-dir` is the path of the service account directory where generated service account files will be written. If you have 
+created a volume mapping as defined in step 2 this will be `-dir="/zebedee/services"` 
 ```
 export HUMAN_LOG=true
 
@@ -70,7 +70,7 @@ The script will output a list of tokens created and the service they belong to
 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9    florence
 ```
 
-8. Once you've finished stop and remove the container
+7. Once you've finished stop and remove the container
 ```bash
 docker stop <CONTAINER_ID>
 
