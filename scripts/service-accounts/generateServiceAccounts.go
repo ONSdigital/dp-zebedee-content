@@ -60,7 +60,7 @@ func init() {
 }
 
 func main() {
-	serviceDir := flag.String("dir", "service", "the service account directory path")
+	serviceDir := flag.String("dir", "/zebedee/services", "the service account directory path")
 	flag.Parse()
 
 	if err := createServiceDir(*serviceDir); err != nil {
@@ -140,16 +140,16 @@ func createServiceDir(path string) error {
 		return nil
 	}
 
-	if os.IsNotExist(err) {
-		log.Event(nil, "service dir does not exist creating")
-		err = os.MkdirAll(path, 0777)
-		if err != nil {
-			return err
-		}
-		return nil
+	if !os.IsNotExist(err) {
+		return err
 	}
 
-	return err
+	log.Event(nil, "services dir does not exist creating")
+	err = os.MkdirAll(path, 0777)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func loadExisting(servicePath string) (map[string]*ServiceAccount, error) {

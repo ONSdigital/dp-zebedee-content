@@ -7,15 +7,15 @@ Service accounts are how our API services authenticate inbound and "sign" outbou
 simple `.json` files containing an ID field - the service name (confusingly). The file name is
  a UUID which is the **service token value** used to sign a request/identify a caller.
 
-#### Florence Example
+#### dp-frontend-dataset-controller Example
 
 `1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9.json`
 ```json
 {
-  "id": "florence"
+  "id": "dp-frontend-dataset-controller"
 }
 ```
-If Florence makes a request to an API requiring service authentication it will set the Auth header with the above token to identify itself:
+If dp-frontend-dataset-controller makes a request to an API requiring service authentication it will set the Auth header with the above token to identify itself:
 ```
 Authorization: Bearer 1L1YlW7aA2hMMGetIbRv3IE3jIgdqYaXkeF8NTXYyZUh3XyvbHh5tUeYnSSCw0x9
 ```
