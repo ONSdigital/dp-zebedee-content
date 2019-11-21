@@ -1,22 +1,29 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"path/filepath"
+	"regexp"
 	"time"
 
 	"github.com/ONSdigital/log.go/log"
 )
 
+const stringMatch string = "export GOARCH?=$(shell go env GOARCH)"
+
 var (
-	serviceIDChars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-	r              *rand.Rand
-	services       = []string{
+	existingServiceAuthToken, _ = regexp.Compile("export SERVICE_AUTH_TOKEN=[a-zA-Z0-9]+")
+	serviceIDChars              = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+	r                           *rand.Rand
+	services                    = []string{
 		"babbage",
 		"florence",
 		"zebedee",
@@ -60,12 +67,25 @@ func init() {
 }
 
 func main() {
+	replaceDir := flag.Bool("replace", false, "the service account directory path to be replaced")
+	pathToServices := flag.String("set-path", "", "path to services")
 	serviceDir := flag.String("dir", "/zebedee/services", "the service account directory path")
+	updateMakeFiles := flag.Bool("update-mk", false, "an indicator to update repo makefiles to add service auth token, must be set to true or false, default value is false")
+
 	flag.Parse()
 
-	if err := createServiceDir(*serviceDir); err != nil {
+	if err := createServiceDir(*serviceDir, *replaceDir); err != nil {
 		log.Event(nil, "error checking service dir", log.Error(err))
 		os.Exit(1)
+	}
+
+	if *updateMakeFiles {
+		// Check path to services is being set
+		if *pathToServices == "" {
+			err := errors.New("missing path to services")
+			log.Event(nil, "unable to update makefiles, missing path to services", log.Error(err))
+			os.Exit(1)
+		}
 	}
 
 	existingAccounts, err := loadExisting(*serviceDir)
@@ -90,10 +110,61 @@ func main() {
 			log.Event(nil, "error creating service account", log.Error(err), logD)
 			os.Exit(1)
 		}
+
+		if *updateMakeFiles {
+			filePath := *pathToServices + "/" + service + "/Makefile"
+
+			if err := updateMakeFile(filePath, acc.ID); err != nil {
+				log.Event(nil, "unable to update makefile for service", log.Error(err), logD)
+			}
+		}
+
 		fmt.Printf("%s\t %s\n", acc.ID, acc.Name)
 	}
 
 	log.Event(nil, "successfully created service accounts")
+}
+
+func updateMakeFile(filePath, serviceAuthToken string) error {
+	lines, err := file2lines(filePath)
+	if err != nil {
+		return err
+	}
+
+	fileContent := ""
+	for _, line := range lines {
+		if !existingServiceAuthToken.MatchString(line) {
+			fileContent += line + "\n"
+		}
+
+		if line == stringMatch {
+			fileContent += "export SERVICE_AUTH_TOKEN=" + serviceAuthToken + "\n"
+		}
+	}
+
+	return ioutil.WriteFile(filePath, []byte(fileContent), 0644)
+}
+
+func file2lines(filePath string) ([]string, error) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return linesFromReader(f)
+}
+
+func linesFromReader(r io.Reader) ([]string, error) {
+	var lines []string
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return lines, nil
 }
 
 func createServiceAccountJSON(path, service string) (*ServiceAccount, error) {
@@ -133,22 +204,27 @@ func createServiceAccountJSON(path, service string) (*ServiceAccount, error) {
 	return serviceAcc, nil
 }
 
-func createServiceDir(path string) error {
-	_, err := os.Stat(path)
+func createServiceDir(path string, replaceServiceDir bool) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		log.Event(nil, "services dir does not exist, now creating")
+		if err = os.MkdirAll(path, 0777); err != nil {
+			return err
+		}
 
-	if err == nil {
 		return nil
 	}
 
-	if !os.IsNotExist(err) {
+	if replaceServiceDir {
+		// Remove existing services directory
+		log.Event(nil, "removing directory")
+		os.RemoveAll(path + "/")
+	}
+
+	log.Event(nil, "services dir does not exist, now creating")
+	if err := os.MkdirAll(path, 0777); err != nil {
 		return err
 	}
 
-	log.Event(nil, "services dir does not exist creating")
-	err = os.MkdirAll(path, 0777)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
