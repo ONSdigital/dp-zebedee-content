@@ -89,7 +89,7 @@ To generate service accounts for your local set up:
 git clone https://github.com/ONSdigital/dp-zebedee-content.git
 ```
 
-2. Move into the scripts dir
+1. Move into the scripts dir
 ```
 cd dp-zebedee-content/scripts/service-accounts
 ```
@@ -99,12 +99,36 @@ cd dp-zebedee-content/scripts/service-accounts
 go build -o generator
 ```
 
-7. Run the script: where `dir` is your `$zebedee_root` + `/zebedee/services` path 
- 
-```
-export HUMAN_LOG=true
+3. Set human readable logging:
 
-./generator -dir="<YOUR_ZEBEDEE_SERVICES_PATH>"
+`export HUMAN_LOG=true`
+
+4. The script has several flags some of which are optional, see table below:
+
+| flag      | mandatory | example                         | description                                                             |
+|-----------|-----------|---------------------------------|-------------------------------------------------------------------------|
+| dir       | yes       | <zebedee_root>/zebedee/services | The path to the location of your stored content for zebedee             |
+| replace   | no        | true                            | A boolean flag to clear out service auth tokens before regenerating     |
+| set-path  | no        | go/src/github.com/ONSdigital    | The path to where your digital publishing services exist                |
+| update-mk | no        | true                            | A boolean flag to update makefiles to contain unique SERVICE_AUTH_TOKEN |
+
+a) If you are planning to generate unique `SERVICE_AUTH_TOKEN`S for each service but do not want
+to update you Makefile for each service, run the following command:
+
+`./generator -dir=$zebedee_root>/zebedee/services`
+
+b) If you want to add any new `SERVICE_AUTH_TOKEN`'s to service Makefiles, run the following command:
+
+`./generator -dir=$zebedee_root>/zebedee/services -set-path="~/go/src/github.com/ONSdigital" -update-mk=true`
+
+For each new service auth token generated it will add the following line to that services Makefile:
+`export SERVICE_AUTH_TOKEN=<generated service auth token>` 
+
+c) If you want to replace all service auth tokens add the replace flag to either a or b options, like so:
+```
+a) ./generator -dir=$zebedee_root>/zebedee/services -replace=true
+
+b) ./generator -dir=$zebedee_root>/zebedee/services -set-path="~/go/src/github.com/ONSdigital" -update-mk=true -replace=true
 ```
 
 
