@@ -166,6 +166,7 @@ func (b *Builder) dirs() []string {
 		b.sessionsDir,
 		b.permissionsDir,
 		b.teamsDir,
+		b.transactionsDir,
 		b.launchPadDir,
 		b.appKeysDir,
 		b.servicesDir,

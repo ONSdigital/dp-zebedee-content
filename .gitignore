@@ -1,3 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea*
 generated/run-cms.sh
+zebContent
+.DS_Store

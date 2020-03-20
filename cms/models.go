@@ -17,6 +17,7 @@ const (
 	Services               = "services"
 	Permissions            = "permissions"
 	Teams                  = "teams"
+	Transactions           = "transactions"
 	LaunchPad              = "launchpad"
 	AppKeys                = "application-keys"
 	defaultContentZip      = "default-content.zip"
@@ -49,6 +50,7 @@ type Builder struct {
 	servicesDir         string
 	permissionsDir      string
 	teamsDir            string
+	transactionsDir     string
 	launchPadDir        string
 	appKeysDir          string
 	enableCMD           bool
@@ -81,6 +83,7 @@ func New(root string, isCMD bool) (*Builder, error) {
 		servicesDir:         filepath.Join(zebedeeDir, Services),
 		permissionsDir:      filepath.Join(zebedeeDir, Permissions),
 		teamsDir:            filepath.Join(zebedeeDir, Teams),
+		transactionsDir:     filepath.Join(zebedeeDir, Transactions),
 		launchPadDir:        filepath.Join(zebedeeDir, LaunchPad),
 		appKeysDir:          filepath.Join(zebedeeDir, AppKeys),
 		enableCMD:           isCMD,
