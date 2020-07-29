@@ -54,7 +54,7 @@ export SERVICE_AUTH_TOKEN="${SERVICE_AUTH_TOKEN:-{{.ServiceAuthToken}}}"
 #
 # Compile and run
 #
-mvn clean package dependency:copy-dependencies -Dmaven.test.skip=true && \
+mvn clean package dependency:copy-dependencies -Dmaven.test.skip=true -Dossindex.skip=true && \
 java $JAVA_OPTS \
  -Dlogback.configurationFile=zebedee-cms/target/classes/logback.xml \
  -Ddb_audit_url=$db_audit_url \
