@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/ONSdigital/dp-zebedee-content/files"
-	"github.com/ONSdigital/log.go/log"
+	"github.com/ONSdigital/dp-zebedee-content/out"
 	"github.com/pkg/errors"
 )
 
@@ -21,10 +21,7 @@ var (
 
 // Build creates the Zebedee CMS directory structure
 func (b *Builder) GenerateCMSContent() error {
-	log.Event(nil, "generating CMS file structure and content", log.Data{
-		"root":       b.zebedeeDir,
-		"enable_cmd": b.enableCMD,
-	})
+	out.Info("generating CMS file structure and default content")
 
 	b.serviceAccountID = defaultServiceAuthToken
 	b.datasetAPIAuthToken = defaultDatasetAPIAuthToken
@@ -67,18 +64,18 @@ func (b *Builder) cleanAndPrepare(contentDir string) error {
 	}
 
 	if exists {
-		log.Event(nil, "the specified content_dir already exists attempting to remove it", log.Data{"content_dir": contentDir})
+		out.InfoFHighlight("content directory already exists attempting to remove it: %s", contentDir)
 		if err := os.RemoveAll(contentDir); err != nil {
 			return errors.WithMessage(err, "error removing existing content_dir")
 		}
-		log.Event(nil, "successfully removed existing content_dir", log.Data{"content_dir": contentDir})
+		out.Info("successfully removed existing content dir")
 	}
 
-	log.Event(nil, "creating content_dir", log.Data{"content_dir": contentDir})
+	out.InfoFHighlight("creating content directory: %s", contentDir)
 	if err := os.MkdirAll(contentDir, 0700); err != nil {
 		return err
 	}
-	log.Event(nil, "content_dir created successfully", log.Data{"content_dir": contentDir})
+	out.InfoFHighlight("content directory created successfully")
 	return nil
 }
 
@@ -93,16 +90,12 @@ func (b *Builder) createDirs() error {
 		}
 	}
 
-	log.Event(nil, "successfully created zebedee directories", log.Data{
-		"dirs": b.dirs(),
-	})
+	out.Info("successfully created zebedee directory structure")
 	return nil
 }
 
 func (b *Builder) copyContentZipToMaster() error {
-	log.Event(nil, "copying default content zip to master dir", log.Data{
-		"master": b.masterDir,
-	})
+	out.InfoFHighlight("copying default content zip to master dir: %s", b.masterDir)
 	cmd := newCommand("cp", "", defaultContentZip, b.masterDir)
 
 	if err := cmd.Run(); err != nil {
@@ -112,9 +105,7 @@ func (b *Builder) copyContentZipToMaster() error {
 }
 
 func (b *Builder) unzipContentInMaster() error {
-	log.Event(nil, "unzipping default content into master", log.Data{
-		"master": b.masterDir,
-	})
+	out.InfoFHighlight("unzipping default content into master: %s", b.masterDir)
 	cmd := newCommand("unzip", b.masterDir, "-q", defaultContentZip)
 
 	if err := cmd.Run(); err != nil {
@@ -124,7 +115,7 @@ func (b *Builder) unzipContentInMaster() error {
 }
 
 func (b *Builder) removeContentZipFromMaster() error {
-	log.Event(nil, "cleaning up default content zip")
+	out.Info("cleaning up default content zip")
 	cmd := newCommand("rm", b.masterDir, defaultContentZip)
 
 	if err := cmd.Run(); err != nil {
@@ -134,10 +125,7 @@ func (b *Builder) removeContentZipFromMaster() error {
 }
 
 func (b *Builder) createServiceAccount() error {
-
-	log.Event(nil, "generating CMD service account", log.Data{
-		"serviceAccountID": b.serviceAccountID,
-	})
+	out.InfoFHighlight("generating CMD service account: %s", b.serviceAccountID)
 
 	jsonB, err := json.Marshal(map[string]interface{}{"id": "Weyland-Yutani Corporation"})
 	if err != nil {
@@ -150,9 +138,7 @@ func (b *Builder) createServiceAccount() error {
 		return errors.Wrap(err, "error writing service account JSON to file")
 	}
 
-	log.Event(nil, "successfully generated service account", log.Data{
-		"serviceAccountID": b.serviceAccountID,
-	})
+	out.Info("service account generated successfully")
 	return nil
 }
 

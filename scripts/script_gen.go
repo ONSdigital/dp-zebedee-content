@@ -9,7 +9,7 @@ import (
 
 	"github.com/ONSdigital/dp-zebedee-content/cms"
 	"github.com/ONSdigital/dp-zebedee-content/files"
-	"github.com/ONSdigital/log.go/log"
+	"github.com/ONSdigital/dp-zebedee-content/out"
 	"github.com/pkg/errors"
 )
 
@@ -32,8 +32,7 @@ func GenerateCMSRunScript(t *cms.RunTemplate) (string, error) {
 	var buf bytes.Buffer
 	err = tmpl.Execute(&buf, t)
 	if err != nil {
-		log.Event(nil, "error generating run.sh from template", log.Error(err))
-		os.Exit(1)
+		return "", err
 	}
 
 	err = ioutil.WriteFile(cmsRunFile, buf.Bytes(), 0644)
@@ -61,7 +60,7 @@ func houseKeeping() error {
 	}
 
 	if exists {
-		log.Event(nil, "removing existing run-cms.sh file")
+		out.Info("removing existing run-cms.sh file before continuing")
 		if err := os.Remove(cmsRunFile); err != nil {
 			return err
 		}
@@ -72,7 +71,8 @@ func houseKeeping() error {
 
 func CopyToProjectDir(zebDir string, generatedFile string) (string, error) {
 	target := path.Join(zebDir, "run-cms.sh")
-	log.Event(nil, "copying run-cms.sh to zebedee project dir", log.Data{"target": target})
+
+	out.InfoFHighlight("copying run-cms.sh to zebedee project directory: %s", target)
 	b, err := ioutil.ReadFile(generatedFile)
 	if err != nil {
 		return "", err

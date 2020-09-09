@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"errors"
-	"flag"
 	"os"
 
 	"github.com/ONSdigital/dp-zebedee-content/cms"
+	"github.com/ONSdigital/dp-zebedee-content/out"
 	"github.com/ONSdigital/dp-zebedee-content/scripts"
 	"github.com/ONSdigital/log.go/log"
+	"github.com/spf13/cobra"
 )
 
 func main() {
@@ -20,53 +20,62 @@ func main() {
 
 func run() error {
 	log.Namespace = "zebedee-content"
-	contentDir := flag.String("content_dir", "", "The directory in which to build Zebedee directory structure and unpack the default content")
-	projectDir := flag.String("project_dir", "", "The root directory of your Zebedee project")
-	enableCMD := flag.Bool("enable_cmd", false, "If enabled the generated run script will have the CMD features enabled")
-	flag.Parse()
 
-	if *contentDir == "" {
-		return errors.New("please specify a content_dir - see help (-h) for more details")
+	root := &cobra.Command{
+		Use:   "content",
+		Short: "Generates default website content, users, permissions and service accounts required to run an instance of Zebedee CMS",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			contentDir, err := cmd.Flags().GetString("content")
+			if err != nil {
+				return err
+			}
+
+			zebedeeDir, err := cmd.Flags().GetString("zebedee")
+			if err != nil {
+				return err
+			}
+
+			if contentDir == "" || zebedeeDir == "" {
+				cmd.Help()
+				return nil
+			}
+
+			builder, err := cms.New(contentDir, true)
+			if err != nil {
+				return err
+			}
+
+			err = builder.GenerateCMSContent()
+			if err != nil {
+				return err
+			}
+
+			t := builder.GetRunTemplate()
+
+			var file string
+			file, err = scripts.GenerateCMSRunScript(t)
+			if err != nil {
+				return err
+			}
+
+			scriptLocation, err := scripts.CopyToProjectDir(zebedeeDir, file)
+			if err != nil {
+				return err
+			}
+
+			out.Info("Successfully generated zebedee directory structure and default content")
+			out.InfoFHighlight("A script to run Zebedee CMS has been generated and placed in your Zebedee project dir: %s", scriptLocation)
+
+			return nil
+		},
 	}
 
-	if *projectDir == "" {
-		return errors.New("please specify the project_dir - see help (-h) for more details")
-	}
+	root.Flags().String("content", "", "The directory to generate website content under (required)")
+	root.Flags().String("zebedee", "", "The directory of your Zebedee project (required)")
 
-	builder, err := cms.New(*contentDir, *enableCMD)
+	err := root.Execute()
 	if err != nil {
 		return err
 	}
-
-	err = builder.GenerateCMSContent()
-	if err != nil {
-		return err
-	}
-
-	t := builder.GetRunTemplate()
-
-	var file string
-	file, err = scripts.GenerateCMSRunScript(t)
-	if err != nil {
-		return err
-	}
-
-	scriptLocation, err := scripts.CopyToProjectDir(*projectDir, file)
-	if err != nil {
-		return err
-	}
-
-	log.Event(context.Background(), "successfully generated zebedee file structure and default content you can use the generated run-cms.sh file to run the application", log.Data{
-		"run_script_location":      scriptLocation,
-		cms.EnableCMDEnv:           t.EnableDatasetImport,
-		cms.DatasetAPIAuthTokenEnv: t.DatasetAPIAuthToken,
-		cms.DatasetAPIURLEnv:       t.DatasetAPIURL,
-		cms.ServiceAuthTokenEnv:    t.ServiceAuthToken,
-	})
-
 	return nil
-}
-
-func errorAndExit(err error) {
-
 }
