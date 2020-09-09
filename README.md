@@ -28,12 +28,12 @@ go build -o zebContent
  - `enable_cmd` should be true. This feature flag is now outdated but this tool hasn't been updated yet. 
 
 ### Flags
-| Flag         | Description                                                   | Example                                                |
-| ------------ |---------------------------------------------------------------| ------------------------------------------------------ |
-| h / help     | Display the help menu.                                        |                                                        |
-| content_dir  | The directory you wish the website content to generated under | `/Users/RickSanchez/Desktop/zebedee-content/generated` |
-| project_dir  | The  directory of your Zebedee project                        | `/Users/RickSanchez/IdeaProjects/zebedee`              |
-| enable_cmd   | Enable or disable the _CMD_ feature.                          |                                                        |
+| Flag         | Description                                                      | Example                                                |
+| ------------ |------------------------------------------------------------------| ------------------------------------------------------ |
+| h / help     | Display the help menu.                                           |                                                        |
+| content_dir  | The directory you wish the website content to be generated under | `/Users/RickSanchez/Desktop/zebedee-content/generated` |
+| project_dir  | The  directory of your Zebedee project                           | `/Users/RickSanchez/IdeaProjects/zebedee`              |
+| enable_cmd   | Enable or disable the _CMD_ feature.                             |                                                        |
 
 
 Once you have run generator (assuming it has completed successfully) you should now have the required directories, content and configurations to run Zebedee locally.
