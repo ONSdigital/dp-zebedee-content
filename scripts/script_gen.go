@@ -60,7 +60,7 @@ func houseKeeping() error {
 	}
 
 	if exists {
-		out.Info("removing existing run-cms.sh file before continuing")
+		out.Info("Removing existing Zebedee run-cms.sh script before continuing")
 		if err := os.Remove(cmsRunFile); err != nil {
 			return err
 		}
@@ -72,7 +72,7 @@ func houseKeeping() error {
 func CopyToProjectDir(zebDir string, generatedFile string) (string, error) {
 	target := path.Join(zebDir, "run-cms.sh")
 
-	out.InfoFHighlight("copying run-cms.sh to zebedee project directory: %s", target)
+	out.Info("Copying generated run-cms.sh to zebedee project directory")
 	b, err := ioutil.ReadFile(generatedFile)
 	if err != nil {
 		return "", err

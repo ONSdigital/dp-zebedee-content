@@ -21,7 +21,7 @@ var (
 
 // Build creates the Zebedee CMS directory structure
 func (b *Builder) GenerateCMSContent() error {
-	out.Info("generating CMS file structure and default content")
+	out.Info("Generating CMS file structure and default content")
 
 	b.serviceAccountID = defaultServiceAuthToken
 	b.datasetAPIAuthToken = defaultDatasetAPIAuthToken
@@ -64,18 +64,16 @@ func (b *Builder) cleanAndPrepare(contentDir string) error {
 	}
 
 	if exists {
-		out.InfoFHighlight("content directory already exists attempting to remove it: %s", contentDir)
+		out.Info("Removing exists Zebedee content directory")
 		if err := os.RemoveAll(contentDir); err != nil {
 			return errors.WithMessage(err, "error removing existing content_dir")
 		}
-		out.Info("successfully removed existing content dir")
 	}
 
-	out.InfoFHighlight("creating content directory: %s", contentDir)
+	out.Info("Generating Zebedee content directory")
 	if err := os.MkdirAll(contentDir, 0700); err != nil {
 		return err
 	}
-	out.InfoFHighlight("content directory created successfully")
 	return nil
 }
 
@@ -90,12 +88,11 @@ func (b *Builder) createDirs() error {
 		}
 	}
 
-	out.Info("successfully created zebedee directory structure")
+	out.Info("Zebedee directory structure created successfully")
 	return nil
 }
 
 func (b *Builder) copyContentZipToMaster() error {
-	out.InfoFHighlight("copying default content zip to master dir: %s", b.masterDir)
 	cmd := newCommand("cp", "", defaultContentZip, b.masterDir)
 
 	if err := cmd.Run(); err != nil {
@@ -105,7 +102,7 @@ func (b *Builder) copyContentZipToMaster() error {
 }
 
 func (b *Builder) unzipContentInMaster() error {
-	out.InfoFHighlight("unzipping default content into master: %s", b.masterDir)
+	out.Info("Populating Zebedee master directory with default content")
 	cmd := newCommand("unzip", b.masterDir, "-q", defaultContentZip)
 
 	if err := cmd.Run(); err != nil {
@@ -115,7 +112,6 @@ func (b *Builder) unzipContentInMaster() error {
 }
 
 func (b *Builder) removeContentZipFromMaster() error {
-	out.Info("cleaning up default content zip")
 	cmd := newCommand("rm", b.masterDir, defaultContentZip)
 
 	if err := cmd.Run(); err != nil {
@@ -125,7 +121,7 @@ func (b *Builder) removeContentZipFromMaster() error {
 }
 
 func (b *Builder) createServiceAccount() error {
-	out.InfoFHighlight("generating CMD service account: %s", b.serviceAccountID)
+	out.Info("Generating new CMD service account")
 
 	jsonB, err := json.Marshal(map[string]interface{}{"id": "Weyland-Yutani Corporation"})
 	if err != nil {
@@ -138,7 +134,6 @@ func (b *Builder) createServiceAccount() error {
 		return errors.Wrap(err, "error writing service account JSON to file")
 	}
 
-	out.Info("service account generated successfully")
 	return nil
 }
 

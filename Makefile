@@ -5,4 +5,4 @@ install:
 .PHONY: debug
 debug:
 	go build -o cli
-	./cli -c=/Users/dave/Development/go/ons/dp-zebedee-content/testing -z=/Users/dave/Development/go/ons/dp-zebedee-content/testing
+	./cli generate -c=<REPLACE_WITH_CONTENT_PATH> -z=<REPLACE_WITH_ZEBEDEE_PROJECT_PATH>
