@@ -32,7 +32,7 @@ The `generate` command will:
 **Note** It's safe to run the `generate` command multiple times. Doing so will overwrite any previously generated 
 content and reset the CMS content, users, teams etc. to the default state.  
 
-#### Flags
+### Flags
 | Flag         | Description                                                                              | Example                                                             |
 | ------------ |------------------------------------------------------------------------------------------| ------------------------------------------------------------------- |
 | h / help     | Display the help menu.                                                                   |                                                                     |
