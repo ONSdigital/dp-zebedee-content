@@ -70,8 +70,8 @@ func run() error {
 		},
 	}
 
-	root.Flags().String("content", "", "The directory to generate website content under (required)")
-	root.Flags().String("zebedee", "", "The directory of your Zebedee project (required)")
+	root.Flags().StringP("content", "c", "","The directory to generate website content under (required)")
+	root.Flags().StringP("zebedee", "z", "", "The directory of your Zebedee project (required)")
 
 	err := root.Execute()
 	if err != nil {
