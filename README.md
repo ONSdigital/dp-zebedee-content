@@ -18,7 +18,7 @@ make install
 
 ### Run
 ```bash
-./cli generate -c=~/path_to_content_dir -z=~/path_to_zebedee_project_dir
+dp-zebedee-content generate -c=~/path_to_content_dir -z=~/path_to_zebedee_project_dir
 ```
 
 See [Flags](#Flags) for further details. 
