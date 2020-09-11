@@ -1,47 +1,48 @@
 # dp-zebedee-content
 
-Command line helper tool for developer Zebedee-CMS set up:
- - Generates the required file system structure.
- - Populates the CMS with basic content
- - Generates a service account (required if running with the _CMD_ feature enabled).
- - Generates a `run-cms.sh` for running Zebedee locally with typical developer configurations.
+Command line tool generating default content required to run Zebedee CMS.
 
 ### Prerequisites
-- Go 1.10.2 +
+- Go 1.12 +
 
 ### Getting started
-The library uses Go Modules so it need to be cloned to a directory **outside of your $GOPATH**
+dp-zebedee-content is a Go Module so needs to be cloned to a directory **outside of your $GOPATH**
 ```
 git clone git@github.com:ONSdigital/dp-zebedee-content.git
 ```
 
-### Build & Run
+### Install
 ```
-go build -o zebContent
-
-./zebContent -content_dir=[CONTENT_DIR] -project_dir=[PROJECT_DIR] -enable_cmd=true
+make install
 ```
 
-**Note**: 
- - Paths must be fully qualified i.e. `/Users/RickSanchez/Desktop/zebedee-content/generated`. Using `~` e.g. 
- `~/Desktop/zebedee-content/generated` will cause an error.
- - `enable_cmd` should be true. This feature flag is now outdated but this tool hasn't been updated yet. 
+### Run
+```bash
+dp-zebedee-content generate -c=~/path_to_content_dir -z=~/path_to_zebedee_project_dir
+```
+
+See [Flags](#Flags) for further details. 
+
+The `generate` command will:
+ - Generate the directory structure required by Zebedee-CMS.
+ - Populate the CMS with default content.
+ - Generates default user, teams, permissions and service token content.
+ - Generates a `run-cms.sh` to running Zebedee locally with typical developer configurations. 
+
+**Note** It's safe to run the `generate` command multiple times. Doing so will overwrite any previously generated 
+content and reset the CMS content, users, teams etc. to the default state.  
 
 ### Flags
-| Flag         | Description                                                      | Example                                                |
-| ------------ |------------------------------------------------------------------| ------------------------------------------------------ |
-| h / help     | Display the help menu.                                           |                                                        |
-| content_dir  | The directory you wish the website content to be generated under | `/Users/RickSanchez/Desktop/zebedee-content/generated` |
-| project_dir  | The  directory of your Zebedee project                           | `/Users/RickSanchez/IdeaProjects/zebedee`              |
-| enable_cmd   | Enable or disable the _CMD_ feature.                             |                                                        |
-
+| Flag         | Description                                                                              | Example                                                             |
+| ------------ |------------------------------------------------------------------------------------------| ------------------------------------------------------------------- |
+| h / help     | Display the help menu.                                                                   |                                                                     |
+| c / content  | The output directory the generated content will be written - this can anywhere you like. | `~/Desktop/zebedee-content/generated` (`~` prefix will be expanded) |
+| z / zebedee  | The directory of your Zebedee Java project.                                              | `~/IdeaProjects/zebedee`                                            |
 
 Once you have run generator (assuming it has completed successfully) you should now have the required directories, content and configurations to run Zebedee locally.
 
 ### CMD configuration
-If you are running Zebedee with the _CMD_ feature enabled you can find the _CMD_ specific configuration values under the CMD section of the generated `./run-cmd.sh` script.
-
-:warning: The script applies default values for the following config properties. When running the script **any existing configuration you have set will take precedence over these defaults**.
+:warning: The `run-cms.sh` script applies default values for the following config properties. When running the script **any existing configuration you have set will take precedence over these defaults**.
 
 ```bash
 zebedee_root
