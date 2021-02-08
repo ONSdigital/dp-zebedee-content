@@ -20,7 +20,7 @@ const (
 	Transactions           = "transactions"
 	LaunchPad              = "launchpad"
 	AppKeys                = "application-keys"
-	KeyRing				   = "keyring"
+	KeyRing                = "keyring"
 	defaultContentZip      = "default-content.zip"
 	EnableCMDEnv           = "ENABLE_DATASET_IMPORT"
 	DatasetAPIAuthTokenEnv = "DATASET_API_AUTH_TOKEN"
@@ -58,7 +58,7 @@ type Builder struct {
 	serviceAccountID    string
 	datasetAPIAuthToken string
 	datasetAPIURL       string
-	keyRingDir			string
+	keyRingDir          string
 }
 
 type RunTemplate struct {
@@ -88,7 +88,7 @@ func New(root string, isCMD bool) (*Builder, error) {
 		transactionsDir:     filepath.Join(zebedeeDir, Transactions),
 		launchPadDir:        filepath.Join(zebedeeDir, LaunchPad),
 		appKeysDir:          filepath.Join(zebedeeDir, AppKeys),
-		keyRingDir:			 filepath.Join(zebedeeDir, KeyRing),
+		keyRingDir:          filepath.Join(zebedeeDir, KeyRing),
 		enableCMD:           isCMD,
 		datasetAPIURL:       "",
 		datasetAPIAuthToken: "",
