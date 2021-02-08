@@ -151,6 +151,7 @@ func (b *Builder) dirs() []string {
 		b.launchPadDir,
 		b.appKeysDir,
 		b.servicesDir,
+		b.keyRingDir,
 	}
 }
 
