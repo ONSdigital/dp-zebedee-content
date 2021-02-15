@@ -5,18 +5,18 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ONSdigital/dp-zebedee-content/cms"
-	"github.com/ONSdigital/dp-zebedee-content/out"
-	"github.com/ONSdigital/dp-zebedee-content/scripts"
+	"github.com/ONSdigital/dp-zebedee-content/zebedee"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	log "github.com/daiLlew/funkylog"
 	"github.com/spf13/cobra"
 )
 
 const (
-	tilde = "~"
-	home  = "HOME"
-
+	tilde       = "~"
+	home        = "HOME"
 	contentFlag = "content"
-	zebedeeFlag = "zebedee"
 )
 
 func GetRootCommand() *cobra.Command {
@@ -25,61 +25,53 @@ func GetRootCommand() *cobra.Command {
 		Short: "Cli tool for ONS website developers. Generates default content and directory structure required to run an instance of Zebedee CMS.",
 	}
 
-	root.AddCommand(getGenerateCommand())
+	sess, _ := session.NewSession(&aws.Config{
+		Region: aws.String("eu-west-1"),
+	})
+
+	downloader := s3manager.NewDownloader(sess)
+	cmd := getGenerateCommand(downloader)
+
+	root.AddCommand(cmd)
 	return root
 }
 
-func getGenerateCommand() *cobra.Command {
+func getGenerateCommand(downloader *s3manager.Downloader) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "generate",
 		Short: "Generate the Zebedee directory structure and populate with default web content, users accounts, user permissions, teams and service accounts.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			contentDir, err := getPathFlag(contentFlag, cmd)
+			baseDir, err := getPathFlag(contentFlag, cmd)
 			if err != nil {
 				return err
 			}
 
-			zebedeeDir, err := getPathFlag(zebedeeFlag, cmd)
-			if err != nil {
-				return err
-			}
-
-			if contentDir == "" || zebedeeDir == "" {
+			if len(baseDir) == 0 {
 				cmd.Help()
 				return nil
 			}
 
-			builder, err := cms.New(contentDir, true)
+			contentDir := filepath.Join(baseDir, "zebedee")
+			if err := zebedee.CreateDirStructure(contentDir); err != nil {
+				return err
+			}
+
+			if err := zebedee.DownloadAndUnzipExampleContent(baseDir, downloader); err != nil {
+				return err
+			}
+
+			var serviceAuthToken string
+			serviceAuthToken, err = zebedee.CreateServiceAccount(filepath.Join(contentDir, "services"))
 			if err != nil {
 				return err
 			}
 
-			err = builder.GenerateCMSContent()
-			if err != nil {
-				return err
-			}
-
-			t := builder.GetRunTemplate()
-
-			var file string
-			file, err = scripts.GenerateCMSRunScript(t)
-			if err != nil {
-				return err
-			}
-
-			scriptLocation, err := scripts.CopyToProjectDir(zebedeeDir, file)
-			if err != nil {
-				return err
-			}
-
-			out.InfoFHighlight("Successfully generated Zebedee CMS file structure and default content: %s", contentDir)
-			out.InfoFHighlight("Successfully generated Zebedee CMS run script: %s", scriptLocation)
+			log.Info("service auth token %s", serviceAuthToken)
 			return nil
 		},
 	}
 
 	cmd.Flags().StringP(contentFlag, "c", "", "The directory to generate the default Zebedee CMS content under (Required)")
-	cmd.Flags().StringP(zebedeeFlag, "z", "", "The directory of your Zebedee project (Required)")
 
 	return cmd
 }

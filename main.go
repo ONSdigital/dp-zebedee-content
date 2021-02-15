@@ -1,19 +1,20 @@
 package main
 
 import (
-	"context"
 	"os"
+	"runtime/debug"
 
 	"github.com/ONSdigital/dp-zebedee-content/commands"
-	"github.com/ONSdigital/log.go/log"
+	"github.com/daiLlew/cli-fmt/log"
 )
 
 func main() {
-	log.Namespace = "dp-zebedee-content"
+	log.Init("dp-zebedee-content")
 
 	err := commands.GetRootCommand().Execute()
 	if err != nil {
-		log.Event(context.Background(), "unexpected error executing cli command", log.Error(err))
+		log.Err("unexpected error executing cli command :violin:: %s", err.Error())
+		debug.PrintStack()
 		os.Exit(1)
 	}
 }
