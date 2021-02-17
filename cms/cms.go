@@ -109,7 +109,7 @@ func CreateDirStructure(cmsRootDir string) (string, error) {
 	}
 
 	if exists {
-		log.Info("an existing zebedee content directory already fileExists under %q deleting and regenerating", zebedeeDir)
+		log.Info("an existing zebedee content directory already exists under %q deleting and regenerating", zebedeeDir)
 		if err := os.RemoveAll(zebedeeDir); err != nil {
 			return "", errors.WithMessage(err, "error removing existing content_dir")
 		}
@@ -129,7 +129,7 @@ func CreateDirStructure(cmsRootDir string) (string, error) {
 	return zebedeeDir, nil
 }
 
-// DownloadContentZip download the example content zip from the S3 bucket.
+// DownloadContentZip download the example CMS content zip from the S3 bucket.
 func DownloadContentZip(target string, downloader Downloader) error {
 	if len(target) == 0 {
 		return errInvalidTargetFile
@@ -145,32 +145,32 @@ func DownloadContentZip(target string, downloader Downloader) error {
 	}
 
 	if exists {
-		log.Info("content zip %s already fileExists skipping download from s3 bucket", target)
+		log.Info("content zip %s already exists skipping download from s3 bucket", target)
 		return nil
 	}
 
-	downloadedFile, err := os.Create(target)
+	downloadTargetFile, err := os.Create(target)
 	if err != nil {
 		errors.Errorf("Unable to open file %q, %v", target, err)
 	}
 
-	defer downloadedFile.Close()
+	defer downloadTargetFile.Close()
 
 	log.Info("downloading %s from S3 bucket", zipName)
 
 	var numBytes int64
-	numBytes, err = downloader.Download(downloadedFile, &s3.GetObjectInput{
+	numBytes, err = downloader.Download(downloadTargetFile, &s3.GetObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(zipName),
 	})
 
-	// If the download error is not nil delete the dest file before returning
+	// If the download errored clean up and delete the downloadTargetFile before returning
 	if err != nil {
 		os.Remove(target)
 		return err
 	}
 
-	log.Info("successfully downloaded website content zip %d bytes", numBytes)
+	log.Info("successfully downloaded CMS content zip %d bytes", numBytes)
 	return nil
 }
 
@@ -239,7 +239,7 @@ func UnzipContent(src, dest string) error {
 	return nil
 }
 
-// CreateServiceAccount create a service account Zebedee CMS. If env var SERVICE_AUTH_TOKEN already fileExists a service
+// CreateServiceAccount create a service account Zebedee CMS. If env var SERVICE_AUTH_TOKEN already exists a service
 // account with this ID will be created, if env SERVICE_AUTH_TOKEN does not exist a new ID & service account will be generated.
 func CreateServiceAccount(servicesDir string) (string, error) {
 	if len(servicesDir) == 0 {

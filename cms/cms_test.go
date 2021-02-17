@@ -51,12 +51,12 @@ func TestDownloadContentZip(t *testing.T) {
 		So(err, ShouldEqual, errDownloaderNil)
 	})
 
-	Convey("should return nil if the content.zip already fileExists", t, func() {
+	Convey("should return nil if the content.zip already exists", t, func() {
 		downloader := &mocks.DownloaderMock{}
 		existingContent, err := os.Create(contentZip)
 		So(err, ShouldBeNil)
 
-		// test tear down up
+		// test tear down
 		defer func() {
 			existingContent.Close()
 			os.Remove(contentZip)

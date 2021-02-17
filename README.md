@@ -2,12 +2,15 @@
 
 Command line tool generating default content required to run Zebedee CMS.
 
+![Alt text](preview.png?raw=true "Optional Title")
+
 ### Prerequisites
 - Go 1.12 +
 - Access to the AWS dev account
 
 ### Getting started
 dp-zebedee-content is a Go Module so needs to be cloned to a directory **outside of your $GOPATH**
+
 ```
 git clone git@github.com:ONSdigital/dp-zebedee-content.git
 ```
@@ -19,7 +22,7 @@ make install
 
 ### Run
 ```bash
-dp-zebedee-content generate -c=~/path_to_where_you_want_the_content_to_be_generated
+dp-zebedee-content generate -c=~/path_where_you_want_the_content_to_be_generated
 ```
 
 See [Flags](#Flags) for further details. 
