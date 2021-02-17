@@ -54,7 +54,7 @@ func getGenerateCommand(downloader *s3manager.Downloader) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringP(contentFlag, "c", "", "The directory to generate the default Zebedee CMS content under (Required)")
+	cmd.Flags().StringP(contentFlag, "c", "", "The directory under which the CMS content will be generated (Required)")
 
 	return cmd
 }

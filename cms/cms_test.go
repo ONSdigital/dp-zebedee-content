@@ -1,13 +1,14 @@
 package cms
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/ONSdigital/dp-zebedee-content/cms/mocks"
-	"github.com/ONSdigital/dp-zebedee-content/files"
 	"github.com/pkg/errors"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -30,7 +31,7 @@ func TestCreateDirStructure(t *testing.T) {
 
 		for _, dir := range cmsDirs {
 			path := filepath.Join(zebedeeDir, dir)
-			exists, err := files.Exists(path)
+			exists, err := fileExists(path)
 			So(err, ShouldBeNil)
 			So(exists, ShouldBeTrue)
 		}
@@ -50,7 +51,7 @@ func TestDownloadContentZip(t *testing.T) {
 		So(err, ShouldEqual, errDownloaderNil)
 	})
 
-	Convey("should return nil if the content.zip already exists", t, func() {
+	Convey("should return nil if the content.zip already fileExists", t, func() {
 		downloader := &mocks.DownloaderMock{}
 		existingContent, err := os.Create(contentZip)
 		So(err, ShouldBeNil)
@@ -76,7 +77,7 @@ func TestDownloadContentZip(t *testing.T) {
 		So(err, ShouldEqual, expectedErr)
 		So(downloader.GetCalls(), ShouldHaveLength, 1)
 
-		exists, existsErr := files.Exists(contentZip)
+		exists, existsErr := fileExists(contentZip)
 		So(existsErr, ShouldBeNil)
 		So(exists, ShouldBeFalse)
 	})
@@ -94,7 +95,7 @@ func TestDownloadContentZip(t *testing.T) {
 		So(err, ShouldBeNil)
 		So(downloader.GetCalls(), ShouldHaveLength, 1)
 
-		exists, existsErr := files.Exists(contentZip)
+		exists, existsErr := fileExists(contentZip)
 		So(existsErr, ShouldBeNil)
 		So(exists, ShouldBeTrue)
 
@@ -131,8 +132,45 @@ func TestUnzipContent(t *testing.T) {
 	})
 }
 
+func TestCreateServiceAccount(t *testing.T) {
+	Convey("should return error if servicesDir is empty", t, func() {
+		serviceToken, err := CreateServiceAccount("")
+
+		So(err, ShouldEqual, errServicesDirEmpty)
+		So(serviceToken, ShouldBeEmpty)
+	})
+
+	Convey("should return error if servicesDir does not exist", t, func() {
+		serviceToken, err := CreateServiceAccount("nodirhere")
+
+		So(err.Error(), ShouldResemble, "servicesDir does not exist nodirhere")
+		So(serviceToken, ShouldBeEmpty)
+	})
+
+	Convey("should create service account", t, func() {
+		serviceToken, err := CreateServiceAccount("test")
+
+		So(err, ShouldBeNil)
+
+		path := fmt.Sprintf("test/%s.json", serviceToken)
+		defer os.Remove(path)
+
+		exists, errExists := fileExists(path)
+		So(errExists, ShouldBeNil)
+		So(exists, ShouldBeTrue)
+
+		b, errRead := ioutil.ReadFile(path)
+		So(errRead, ShouldBeNil)
+
+		var actual serviceAccount
+		err = json.Unmarshal(b, &actual)
+		So(err, ShouldBeNil)
+		So(actual, ShouldResemble, defaultServiceAccount)
+	})
+}
+
 func assertContentDir(path string) {
-	exists, existsErr := files.Exists(path)
+	exists, existsErr := fileExists(path)
 	So(existsErr, ShouldBeNil)
 	So(exists, ShouldBeTrue)
 
@@ -142,7 +180,7 @@ func assertContentDir(path string) {
 }
 
 func assertContentFile(path string, expectedContent string) {
-	exists, existsErr := files.Exists(path)
+	exists, existsErr := fileExists(path)
 	So(existsErr, ShouldBeNil)
 	So(exists, ShouldBeTrue)
 
@@ -157,7 +195,7 @@ func assertContentFile(path string, expectedContent string) {
 }
 
 func tearDownCMSDirs(rootDir string) {
-	if exists, err := files.Exists(rootDir); exists {
+	if exists, err := fileExists(rootDir); exists {
 		So(err, ShouldBeNil)
 
 		err := os.RemoveAll(rootDir)

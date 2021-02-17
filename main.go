@@ -2,10 +2,9 @@ package main
 
 import (
 	"os"
-	"runtime/debug"
 
 	"github.com/ONSdigital/dp-zebedee-content/commands"
-	"github.com/daiLlew/cli-fmt/log"
+	log "github.com/daiLlew/funkylog"
 )
 
 func main() {
@@ -13,8 +12,7 @@ func main() {
 
 	err := commands.GetRootCommand().Execute()
 	if err != nil {
-		log.Err("unexpected error executing cli command :violin:: %s", err.Error())
-		debug.PrintStack()
+		log.Err("unexpected error executing cli command :violin:: %+v", err)
 		os.Exit(1)
 	}
 }
