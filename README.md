@@ -5,9 +5,29 @@ Command line tool generating default content required to run Zebedee CMS.
 ![Alt text](preview.png?raw=true "Optional Title")
 
 ### Prerequisites
-- Go 1.12 +
+- Go version >= `1.15`
 - Access to the AWS dev account
+- Your aws config/credentials files will need entries for the `[default]` profile:
 
+Example:
+`.aws/config`
+```bash
+  [default]
+  region = eu-west-1
+  ```
+Example: `.aws/credentials`
+```
+...
+[default]
+aws_access_key_id=...
+aws_secret_access_key=...
+
+[development]
+aws_access_key_id=....
+aws_secret_access_key=...
+region=eu-west-1
+...
+```
 ### Getting started
 dp-zebedee-content is a Go Module so needs to be cloned to a directory **outside of your $GOPATH**
 
