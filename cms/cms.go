@@ -88,7 +88,7 @@ func Setup(cmsRootDir string, downloader Downloader) error {
 	log.Info(":exclamation: Add the following to your env vars if they do not already exist :exclamation:")
 
 	color.Yellow("\n\texport SERVICE_AUTH_TOKEN=%s", serviceAuthToken)
-	color.Yellow("\texport zebedee_root=%s\n\n", zebedeeDir)
+	color.Yellow("\texport zebedee_root=%s\n\n", cmsRootDir)
 
 	log.Info("restart zebedee if already running and ensure the correct %q configuration is being applied (full app configuration is logged on start up)", "zebedee_root")
 	log.Info("set up CMS content completed successfully :tada::rocket:")
