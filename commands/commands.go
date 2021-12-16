@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	log "github.com/daiLlew/funkylog"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +55,7 @@ func getGenerateCommand(downloader *s3manager.Downloader) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringP(contentFlag, "c", "", "The directory under which the CMS content will be generated (Required)")
+	cmd.Flags().StringP(contentFlag, "c", "", "The directory under which the CMS content will be generated (will fall back on `zebedee_root` env var) (Required)")
 
 	return cmd
 }
@@ -63,6 +64,17 @@ func getPathFlag(name string, cmd *cobra.Command) (string, error) {
 	p, err := cmd.Flags().GetString(name)
 	if err != nil {
 		return "", err
+	}
+
+	if p == "" {
+		log.Info("content directory flag not set, attempting to use the zebedee_root environment variable")
+		p = os.Getenv("zebedee_root")
+		if p == "" {
+			log.Err("zebedee_root environment variable also not set, aborting...")
+			return "", err
+		}
+	} else {
+		log.Info("content directory flag found")
 	}
 
 	if strings.HasPrefix(p, tilde) {
