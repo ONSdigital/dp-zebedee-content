@@ -2,16 +2,15 @@ package cms
 
 import (
 	"archive/zip"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	log "github.com/daiLlew/funkylog"
 	"github.com/fatih/color"
 	"github.com/pkg/errors"
@@ -19,7 +18,6 @@ import (
 
 var (
 	errInvalidTargetFile   = errors.New("download target file required but was empty")
-	errDownloaderNil       = errors.New("Downloader required but was nil")
 	errContentRootDirEmpty = errors.New("content root dir path required but was empty")
 	errZipSrcEmpty         = errors.New("zip source file required but was empty")
 	errZipDestEmpty        = errors.New("zip destination file required but was empty")
@@ -42,24 +40,19 @@ var (
 
 	defaultServiceAuthToken = "fc4089e2e12937861377629b0cd96cf79298a4c5d329a2ebb96664c88df77b67"
 	zipName                 = "cms-content.zip"
-	bucketName              = "developer-cms-content"
+	bucketName              = "ons-dp-sandbox-developer-cms-content"
 	serviceTokenEnvVar      = "SERVICE_AUTH_TOKEN"
 	defaultServiceAccount   = serviceAccount{
 		ID: "Weyland-Yutani Corporation",
 	}
 )
 
-// Downloader defines an object for downloading something from an s3 bucket.
-type Downloader interface {
-	Download(w io.WriterAt, input *s3.GetObjectInput, options ...func(downloader *s3manager.Downloader)) (n int64, err error)
-}
-
 type serviceAccount struct {
 	ID string `json:"id"`
 }
 
 // Setup the CMS content.
-func Setup(cmsRootDir string, downloader Downloader) error {
+func Setup(cmsRootDir string) error {
 	if len(cmsRootDir) == 0 {
 		return errContentRootDirEmpty
 	}
@@ -70,7 +63,7 @@ func Setup(cmsRootDir string, downloader Downloader) error {
 	}
 
 	contentZip := filepath.Join(cmsRootDir, zipName)
-	if err := DownloadContentZip(contentZip, downloader); err != nil {
+	if err := DownloadContentZip(contentZip); err != nil {
 		return errors.WithMessage(err, "error attempting to download content zip")
 	}
 
@@ -130,13 +123,9 @@ func CreateDirStructure(cmsRootDir string) (string, error) {
 }
 
 // DownloadContentZip download the example CMS content zip from the S3 bucket.
-func DownloadContentZip(target string, downloader Downloader) error {
+func DownloadContentZip(target string) error {
 	if len(target) == 0 {
 		return errInvalidTargetFile
-	}
-
-	if downloader == nil {
-		return errDownloaderNil
 	}
 
 	exists, errExist := fileExists(target)
@@ -149,28 +138,38 @@ func DownloadContentZip(target string, downloader Downloader) error {
 		return nil
 	}
 
-	downloadTargetFile, err := os.Create(target)
-	if err != nil {
-		errors.Errorf("Unable to open file %q, %v", target, err)
-	}
-
-	defer downloadTargetFile.Close()
-
 	log.Info("downloading %s from S3 bucket", zipName)
 
 	var numBytes int64
-	numBytes, err = downloader.Download(downloadTargetFile, &s3.GetObjectInput{
-		Bucket: aws.String(bucketName),
-		Key:    aws.String(zipName),
-	})
 
-	// If the download errored clean up and delete the downloadTargetFile before returning
+	err := checkLsExists()
 	if err != nil {
-		os.Remove(target)
 		return err
 	}
 
+	path := "s3://" + bucketName + "/" + zipName
+	cmd := exec.Command("aws", "s3", "cp", path, target)
+
+	var stdoutBuf, stderrBuf bytes.Buffer
+	cmd.Stdout = io.MultiWriter(os.Stdout, &stdoutBuf)
+	cmd.Stderr = io.MultiWriter(os.Stderr, &stderrBuf)
+
+	err = cmd.Run()
+	if err != nil {
+		return err
+	}
+	//	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
+	//	fmt.Printf("\nout:\n%s\nerr:\n%s\n", outStr, errStr)
+
 	log.Info("successfully downloaded CMS content zip %d bytes", numBytes)
+	return nil
+}
+
+func checkLsExists() error {
+	_, err := exec.LookPath("aws")
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

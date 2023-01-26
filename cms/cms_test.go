@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ONSdigital/dp-zebedee-content/cms/mocks"
-	"github.com/pkg/errors"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -42,17 +40,11 @@ func TestDownloadContentZip(t *testing.T) {
 	contentZip := "content.zip"
 
 	Convey("should return an error if target is empty", t, func() {
-		err := DownloadContentZip("", nil)
+		err := DownloadContentZip("")
 		So(err, ShouldEqual, errInvalidTargetFile)
 	})
 
-	Convey("should return an error if downloader is nil", t, func() {
-		err := DownloadContentZip(contentZip, nil)
-		So(err, ShouldEqual, errDownloaderNil)
-	})
-
 	Convey("should return nil if the content.zip already exists", t, func() {
-		downloader := &mocks.DownloaderMock{}
 		existingContent, err := os.Create(contentZip)
 		So(err, ShouldBeNil)
 
@@ -62,46 +54,24 @@ func TestDownloadContentZip(t *testing.T) {
 			os.Remove(contentZip)
 		}()
 
-		err = DownloadContentZip(contentZip, downloader)
+		err = DownloadContentZip(contentZip)
 
 		So(err, ShouldBeNil)
-		So(downloader.GetCalls(), ShouldHaveLength, 0)
-	})
-
-	Convey("should return error downloader fails to download the content.zip", t, func() {
-		expectedErr := errors.New("download failed")
-		downloader := mocks.ErroringDownloader(expectedErr)
-
-		err := DownloadContentZip(contentZip, downloader)
-
-		So(err, ShouldEqual, expectedErr)
-		So(downloader.GetCalls(), ShouldHaveLength, 1)
-
-		exists, existsErr := fileExists(contentZip)
-		So(existsErr, ShouldBeNil)
-		So(exists, ShouldBeFalse)
 	})
 
 	Convey("should return nil if the downloader successfully downloads the content.zip", t, func() {
-		downloader := mocks.SuccessfulDownloader(func() (int64, error) {
-			err := ioutil.WriteFile(contentZip, []byte("hello world"), 0700)
-			return 0, err
-		})
-
 		defer os.Remove(contentZip)
 
-		err := DownloadContentZip(contentZip, downloader)
+		err := DownloadContentZip(contentZip)
 
 		So(err, ShouldBeNil)
-		So(downloader.GetCalls(), ShouldHaveLength, 1)
 
 		exists, existsErr := fileExists(contentZip)
 		So(existsErr, ShouldBeNil)
 		So(exists, ShouldBeTrue)
 
-		b, readErr := ioutil.ReadFile(contentZip)
+		_, readErr := ioutil.ReadFile(contentZip)
 		So(readErr, ShouldBeNil)
-		So(string(b), ShouldResemble, "hello world")
 	})
 }
 

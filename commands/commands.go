@@ -6,9 +6,6 @@ import (
 	"strings"
 
 	"github.com/ONSdigital/dp-zebedee-content/cms"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	log "github.com/daiLlew/funkylog"
 	"github.com/spf13/cobra"
 )
@@ -25,18 +22,13 @@ func GetRootCommand() *cobra.Command {
 		Short: "Cli tool for ONS website developers. Generates default content and directory structure required to run an instance of Zebedee CMS.",
 	}
 
-	sess, _ := session.NewSession(&aws.Config{
-		Region: aws.String("eu-west-1"),
-	})
-
-	downloader := s3manager.NewDownloader(sess)
-	cmd := getGenerateCommand(downloader)
+	cmd := getGenerateCommand()
 
 	root.AddCommand(cmd)
 	return root
 }
 
-func getGenerateCommand(downloader *s3manager.Downloader) *cobra.Command {
+func getGenerateCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "generate",
 		Short: "Generate the Zebedee directory structure and populate with default web content, users accounts, user permissions, teams and service accounts.",
@@ -51,7 +43,7 @@ func getGenerateCommand(downloader *s3manager.Downloader) *cobra.Command {
 				return nil
 			}
 
-			return cms.Setup(contentRootDir, downloader)
+			return cms.Setup(contentRootDir)
 		},
 	}
 
