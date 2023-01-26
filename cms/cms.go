@@ -168,6 +168,7 @@ func DownloadContentZip(target string) error {
 func checkLsExists() error {
 	_, err := exec.LookPath("aws")
 	if err != nil {
+		fmt.Printf("Please install aws cli tool\n")
 		return err
 	}
 	return nil
