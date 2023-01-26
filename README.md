@@ -6,38 +6,17 @@ Command line tool generating default content required to run Zebedee CMS.
 
 ## Prerequisites
 
-- Go version >= `1.15`
-- Access to the AWS dev account (optional)
+- Go version >= `1.19`
+- Access to the AWS Sandbox account
 
-### With AWS dev account access
+### AWS dev account access
 
-- Your aws config/credentials files will need entries for the `[default]` profile:
+- Ensure you select the Sandbox account before running this app, in order for this application to access the S3 bucket:  `ons-dp-sandbox-developer-cms-content`
 
-Example: `.aws/config`
-
-```ini
-  [default]
-  region=eu-west-1
-  ```
-
-Example: `.aws/credentials`
-
-```ini
-...
-[default]
-aws_access_key_id=...
-aws_secret_access_key=...
-
-[development]
-aws_access_key_id=....
-aws_secret_access_key=...
-region=eu-west-1
-...
-```
 
 ### Without AWS dev account access
 
-Alternatively, if you do not have access to the `develop` account (deprecated), you may request the `cms-contents.zip` file to a colleague.
+Alternatively, if you do not have access to the `Sandbox` account, you may request the `cms-contents.zip` file from a colleague.
 
 ## Getting started
 
@@ -55,7 +34,7 @@ make install
 
 ### (Optional) Place content zip file
 
-If you do not have access to the AWS `develop` account and you have a `cms-contents.zip` file, please place it to the path where you want your contents:
+If you do not have access to the AWS `Sandbox` account and you have a `cms-contents.zip` file, please place it to the path where you want your contents:
 
 ```shell
 cp cms-contents.zip ~/path_where_you_want_the_content_to_be_generated
