@@ -1,86 +1,68 @@
 # dp-zebedee-content
 
-Command line tool generating default content required to run Zebedee CMS.
-
-![Alt text](preview.png?raw=true "Optional Title")
-
-## Prerequisites
-
-- Go version >= `1.19`
-- Access to the AWS Sandbox account
-
-### AWS dev account access
-
-- Ensure you select the Sandbox account before running this app, in order for this application to access the S3 bucket:  `ons-dp-sandbox-developer-cms-content`
-
-
-### Without AWS dev account access
-
-Alternatively, if you do not have access to the `Sandbox` account, you may request the `cms-contents.zip` file from a colleague.
+Test content for local development of the dissemination "legacy core" stack. Specifically, this repo generates the directory structure and test content required by zebedee (aka zebedee cms), zebedee reader and the-train.
 
 ## Getting started
 
-dp-zebedee-content is a Go Module so needs to be cloned to a directory **outside of your $GOPATH**
+It is strongly recommended that you use a dp-compose stack for your local environment rather than creating one manually. These stacks will complete the following automatically through the stack's provisioning and volume mounts.
+
+If you choose to manually set up an environment then:
+
+1. Clone this repo:
+
+   ```shell
+   git clone git@github.com:ONSdigital/dp-zebedee-content
+   ```
+
+2. Initialise the content
+
+   ```shell
+   cd dp-zebedee-content
+   make init
+   ```
+
+3. Set environment variables to configure the appropriate directories for the apps:
+
+   ```shell
+   export DP_ZEBEDEE_CONTENT=<PATH TO THIS REPO>
+
+   # zebedee cms
+   export zebedee_root=${DP_ZEBEDEE_CONTENT}/publishing
+
+   # zebedee reader
+   export content_dir=${DP_ZEBEDEE_CONTENT}/web/site
+
+   # the-train
+   export TRANSACTION_STORE=${DP_ZEBEDEE_CONTENT}/web/transactions
+   export WEBSITE=${DP_ZEBEDEE_CONTENT}/web/site
+   ```
+
+### Resetting the content
+
+You can delete and recreate your directories and content by re-running:
 
 ```shell
-git clone git@github.com:ONSdigital/dp-zebedee-content.git
+make init
 ```
 
-### Install
+## Adding content
 
-```shell
-make install
-```
+Additional test content can be added by:
 
-### (Optional) Place content zip file
+1. On a feature branch, copy all files from the directory corresponding to a page on the site to the corresponding location under `src/content`
 
-If you do not have access to the AWS `Sandbox` account and you have a `cms-contents.zip` file, please place it to the path where you want your contents:
+2. Re-initialise to test the new content
 
-```shell
-cp cms-contents.zip ~/path_where_you_want_the_content_to_be_generated
-```
+   ```shell
+   make init
+   ```
 
-The program will skip the download step if it finds the `cms-contents.zip` file in the content folder, and will use it instead.
+3. If the content works as expected then open a PR for the change
 
-### Run
+## Licence
 
-```shell
-dp-zebedee-content generate -c=~/path_where_you_want_the_content_to_be_generated
-```
+Copyright (c) Crown Copyright ([Office for National Statistics](https://www.ons.gov.uk))
 
-See [Flags](#Flags) for further details.
+Test content provided by this repo under contains public sector information sourced from [ONS.GOV.UK](https://www.ons.gov.uk/) and licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
-The `generate` command will:
-
-- Generate the directory structure required by Zebedee-CMS.
-- Populate the CMS with default content.
-- Generates default user, teams, permissions and service token content.
-
-**Note** It's safe to run the `generate` command multiple times. Doing so will overwrite any previously generated
-content and reset the CMS content, users, teams etc. to the default state.
-
-### Flags
-
-| Flag        | Description                                                                                                                                                 | Example                                                              |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| h / help    | Display the help menu.                                                                                                                                      |                                                                      |
-| c / content | The output directory the generated content will be written - this can be anywhere you like. If unset, the `zebedee_root` env var will be attempted instead. | `~/Desktop/zebedee-content/generated` (`~` prefix will be expanded). |
-
-Once you have run generator add the output `zebedee_root` and `SERVICE_AUTH_TOKEN` values to your ENV vars.
-You should now have the required directories, content and configurations to run a local copy of Zebedee CMS.
-
-## Help/Issues
-
-If you experience any problems with this tool please speak to a member of the dev team. If you believe there is a defect or issue with the code you can either:
-
-- Raise a [github issue][2].
-- Open pull request.
-
-Please be sure to provide a description of the problem and steps to recreate.
-
-Kind regards
-
-The Dev team
-
-[1]: https://github.com/kardianos/govendor
-[2]: https://github.com/ONSdigital/dp-zebedee-content/issues
+Unless stated otherwise, this repo is released under MIT license, see [LICENCE](LICENCE) for details.
