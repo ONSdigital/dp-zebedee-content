@@ -3,15 +3,18 @@ SRC_DIR          = src
 SRC_CONTENT_DIR  = content
 SRC_SERVICES_DIR = services
 
+# Generated content directory
+GENERATED_ROOT_DIR = generated
+
 # Publishing dirs
 # PUB_ROOT_DIR is $zebedee_root + the extra zebedee subdir that zebedee requires
-PUB_ROOT_DIR       = publishing/zebedee
+PUB_ROOT_DIR       = $(GENERATED_ROOT_DIR)/publishing/zebedee
 PUB_MASTER_DIR     = master
 PUB_SERVICES_DIR   = services
 PUB_DIRS_TO_CREATE = $(PUB_MASTER_DIR) $(PUB_SERVICES_DIR) application-keys collections keyring launchpad permissions publishing-log transactions
 
 # Web dirs
-WEB_ROOT_DIR       = web
+WEB_ROOT_DIR       = $(GENERATED_ROOT_DIR)/web
 WEB_SITE_DIR       = site
 WEB_DIRS_TO_CREATE = $(WEB_SITE_DIR) transactions
 
@@ -28,4 +31,4 @@ init: clean
 
 .PHONY: clean
 clean:
-	rm -rf web/ publishing/
+	rm -rf $(GENERATED_ROOT_DIR)

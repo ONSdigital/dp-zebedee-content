@@ -6,5 +6,4 @@ cli
 .vscode/launch.json
 
 # Files created by script
-/publishing/*
-/web/*
+/generated/*
