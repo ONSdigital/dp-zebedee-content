@@ -1,0 +1,20 @@
+{
+  "items": [],
+  "datasets": [],
+  "statsBulletins": [],
+  "relatedArticles": [],
+  "relatedMethodology": [],
+  "relatedMethodologyArticle": [],
+  "highlightedContent": [],
+  "index": 2,
+  "type": "product_page",
+  "uri": "/peoplepopulationandcommunity/populationandmigration/populationestimates",
+  "description": {
+    "title": "Population estimates",
+    "summary": "Annual population estimates. Figures are available for various administrative and electoral geographies and for different population sub-groups, for example, estimates of the very old and estimates by marital status.",
+    "metaDescription": "Annual population estimates for the UK and its constituent countries, the regions and counties of England, and local authorities and their equivalents. Estimates for lower and middle layer Super Output Areas, Westminster parliamentary constituencies, electoral wards and National Parks in England and Wales and clinical commissioning groups in England.",
+    "unit": "",
+    "preUnit": "",
+    "source": ""
+  }
+}

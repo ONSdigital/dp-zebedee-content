@@ -1,0 +1,27 @@
+{
+  "items": [],
+  "datasets": [],
+  "statsBulletins": [],
+  "relatedArticles": [],
+  "relatedMethodology": [],
+  "relatedMethodologyArticle": [],
+  "highlightedContent": [],
+  "index": 1,
+  "type": "product_page",
+  "uri": "/employmentandlabourmarket/peopleinwork/employmentandemployeetypes",
+  "description": {
+    "title": "Employment and employee types",
+    "summary": "Employment rates show the number of people in paid work as a proportion of the population, broken down by age and sex. Includes information on the number of people in employment and vacancies.",
+    "keywords": [
+      "jobs",
+      "labour market",
+      "occupation",
+      "full-time employment",
+      "part-time employment"
+    ],
+    "metaDescription": "Employment rates show the number of people in paid work as a proportion of the population, broken down by age and sex. Includes information on the number of people in employment and vacancies.",
+    "unit": "",
+    "preUnit": "",
+    "source": ""
+  }
+}

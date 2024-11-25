@@ -1,49 +1,65 @@
 {
-	"intro": {
-		"title": "Welcome to the Office for National Statistics",
-		"markdown": "The UK's largest independent producer of official statistics and the recognised national statistical institute of the UK."
+	"featuredContent": [
+		{
+			"title": "Consumer Price Inflation",
+			"uri": "/economy/inflationandpriceindices/bulletins/consumerpriceinflation/latest",
+			"description": "Price indices, percentage changes and weights for the CPI, CPIH, RPI and RPIJ and the components that make up these indices."
+		},
+		{
+			"title": "UK Environmental Accounts",
+			"uri": "/economy/environmentalaccounts/bulletins/ukenvironmentalaccounts/latest",
+			"description": "Measuring the contribution of the environment to the economy, impact of economic activity on the environment, and response to environmental issues."
+		},
+		{
+			"title": "Statistically Speaking",
+			"uri": "https://sites.libsyn.com/397223/website",
+			"description": "Catch up with every episode of our public data podcast series."
+		},
+		{
+			"title": "Labour Disputes",
+			"uri": "/employmentandlabourmarket/peopleinwork/workplacedisputesandworkingconditions/articles/labourdisputes/latest",
+			"description": "UK breakdown of labour disputes covering: number of working days lost and number of stoppages."
+		}
+	],
+	"aroundONS": [
+		{
+			"title": "Local statistics ",
+			"uri": "https://www.ons.gov.uk/about/localstatistics/",
+			"description": "Where to find statistics covering specific areas."
+		},
+		{
+			"title": "National Statistical",
+			"uri": "https://blog.ons.gov.uk/",
+			"description": "News and insight from the Office for National Statistics."
+		},
+		{
+			"title": "Other government statistics",
+			"uri": "https://www.gov.uk/search/research-and-statistics",
+			"description": "Official Statistics available from across government."
+		}
+	],
+	"emergencyBanner": {
+		"type": "local_emergency",
+		"title": "Local Dev",
+		"description": "This is the local dev environment."
 	},
-	"sections": [{
-		"theme": {
-			"uri": "/economy"
-		},
-		"statistics": {
-			"uri": "/economy/inflationandpriceindices/timeseries/d7g7"
-		}
-	}, {
-		"theme": {
-			"uri": "/economy"
-		},
-		"statistics": {
-			"uri": "/economy/grossdomesticproductgdp/timeseries/ihyq"
-		}
-	}, {
-		"theme": {
-			"uri": "/economy"
-		},
-		"statistics": {
-			"uri": "/economy/grossdomesticproductgdp/timeseries/abml"
-		}
-	}, {
-		"theme": {
-			"uri": "/businessindustryandtrade"
-		},
-		"statistics": {
-			"uri": "/businessindustryandtrade/tourismindustry/timeseries/gmat"
-		}
-	}, {
-		"theme": {
-			"uri": "/businessindustryandtrade"
-		},
-		"statistics": {
-			"uri": "/businessindustryandtrade/changestobusiness/mergersandacquisitions/timeseries/cbas"
-		}
-	}],
+	"serviceMessage": "",
 	"type": "home_page",
 	"uri": "/",
-	"breadcrumb": [],
 	"description": {
 		"title": "Home",
-		"summary": "The UK's largest independent producer of official statistics and the recognised national statistical institute of the UK."
+		"summary": "The UK's largest independent producer of official statistics and the recognised national statistical institute of the UK.",
+		"keywords": [
+			"statistics",
+			"economy",
+			"census",
+			"population",
+			"inflation",
+			"employment"
+		],
+		"metaDescription": "The UK's largest independent producer of official statistics and the recognised national statistical institute of the UK.",
+		"unit": "",
+		"preUnit": "",
+		"source": ""
 	}
 }

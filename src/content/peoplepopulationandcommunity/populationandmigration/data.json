@@ -1,0 +1,32 @@
+{
+  "sections": [
+    {
+      "uri": "/peoplepopulationandcommunity/populationandmigration/internationalmigration",
+      "index": 0
+    },
+    {
+      "uri": "/peoplepopulationandcommunity/populationandmigration/migrationwithintheuk",
+      "index": 1
+    },
+    {
+      "uri": "/peoplepopulationandcommunity/populationandmigration/populationestimates",
+      "index": 0
+    },
+    {
+      "uri": "/peoplepopulationandcommunity/populationandmigration/populationprojections",
+      "index": 3
+    }
+  ],
+  "highlightedLinks": [],
+  "index": 12,
+  "type": "taxonomy_landing_page",
+  "uri": "/peoplepopulationandcommunity/populationandmigration",
+  "description": {
+    "title": "Population and migration",
+    "summary": "Size, age, sex and geographic distribution of the UK population, including data on international migration, migration within the UK, changes in the population and the factors driving these changes.",
+    "metaDescription": "Size, age, sex and geographic distribution of the UK population, including data on international migration, migration within the UK, changes in the population and the factors driving these changes.",
+    "unit": "",
+    "preUnit": "",
+    "source": ""
+  }
+}
