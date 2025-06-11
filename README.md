@@ -27,14 +27,14 @@ If you choose to manually set up an environment then:
    export DP_ZEBEDEE_CONTENT=<PATH TO THIS REPO>
 
    # zebedee cms
-   export zebedee_root=${DP_ZEBEDEE_CONTENT}/publishing
+   export zebedee_root=${DP_ZEBEDEE_CONTENT}/generated/publishing
 
    # zebedee reader
-   export content_dir=${DP_ZEBEDEE_CONTENT}/web/site
+   export content_dir=${DP_ZEBEDEE_CONTENT}/generated/web/site
 
    # the-train
-   export TRANSACTION_STORE=${DP_ZEBEDEE_CONTENT}/web/transactions
-   export WEBSITE=${DP_ZEBEDEE_CONTENT}/web/site
+   export TRANSACTION_STORE=${DP_ZEBEDEE_CONTENT}/generated/web/transactions
+   export WEBSITE=${DP_ZEBEDEE_CONTENT}/generated/web/site
    ```
 
 ### Resetting the content
